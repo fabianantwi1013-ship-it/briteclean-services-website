@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import WhyChooseUs from '../components/WhyChooseUs.astro';
+import Testimonials from '../components/Testimonials.astro';
+import ServiceArea from '../components/ServiceArea.astro';
+import CtaBand from '../components/CtaBand.astro';
+import BookingForm from '../components/BookingForm.astro';
+import { business, hero } from '../data/site.js';
+
+const description = `${hero.subheadline} ${business.name} serves ${business.city}, ${business.state} and surrounding areas — residential, office and commercial cleaning.`;
+---
+
+<Layout title={`${business.name} — ${business.tagline}`} description={description} bare>
+  <Hero />
+  <TrustBadges />
+  <ServicesGrid />
+  <WhyChooseUs />
+  <Testimonials />
+  <ServiceArea />
+
+  <section class="bc-section bc-section--soft" id="book">
+    <div class="bc-container">
+      <div class="bc-section__head">
+        <span class="bc-eyebrow">Book a cleaning</span>
+        <h2>Request Your Cleaning in Five Steps</h2>
+        <p>Tell us what you need. No payment now — we confirm every booking with you personally first.</p>
+      </div>
+      <BookingForm context="home" />
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>

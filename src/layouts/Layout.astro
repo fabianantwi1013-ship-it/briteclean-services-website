@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Schema from '../components/Schema.astro';
+import { business } from '../data/site.js';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path to an OG image, relative to the site root. */
+  image?: string;
+  /** Set on the homepage, where the title should not be suffixed. */
+  bare?: boolean;
+}
+
+const { title, description, image = '/img/photos/hero-kitchen-counter.jpg', bare = false } = Astro.props;
+
+const fullTitle = bare ? title : `${title} – ${business.name}`;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" type="image/png" href="/img/brand/site-icon.png" />
+    <link rel="apple-touch-icon" href="/img/brand/site-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="generator" content={Astro.generator} />
+    <Schema />
+  </head>
+
+  <body>
+    <a class="bc-skip-link" href="#bc-main">Skip to content</a>
+
+    <Header />
+
+    <main id="bc-main">
+      <slot />
+    </main>
+
+    <Footer />
+    <WhatsAppFloat />
+
+    <script>
+      /**
+       * Mobile navigation toggle.
+       *
+       * The menu is a real <nav> that is visible by default and hidden by CSS at small
+       * widths, so it still works if this script fails to load.
+       */
+      const toggle = document.querySelector('.bc-nav-toggle');
+      const nav = document.getElementById('bc-primary-nav');
+
+      if (toggle && nav) {
+        const setOpen = (open) => {
+          nav.classList.toggle('is-open', open);
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        };
+
+        toggle.addEventListener('click', () => {
+          setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+        });
+
+        // Escape closes the menu and returns focus to the button that opened it.
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && nav.classList.contains('is-open')) {
+            setOpen(false);
+            toggle.focus();
+          }
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!nav.classList.contains('is-open')) return;
+          if (!nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+        });
+
+        // Reset when crossing into the desktop layout, so the menu is not left in a
+        // stale "open" state that CSS no longer styles.
+        const desktop = window.matchMedia('(min-width: 980px)');
+        desktop.addEventListener('change', (e) => e.matches && setOpen(false));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+---
+/**
+ * LocalBusiness + WebSite structured data.
+ *
+ * Google treats this as the canonical description of the business for local search,
+ * so the values must match the NAP shown in the footer exactly — inconsistency
+ * between them measurably hurts local ranking. Both read from the same source.
+ */
+import { business, hero, services, addressLine } from '../data/site.js';
+
+const site = 'https://britecleanservices.com';
+
+const openingHours = business.hours
+  .filter((h) => h.open && h.close)
+  .map((h) => {
+    const days = h.days.includes('–')
+      ? (() => {
+          const order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+          const [from, to] = h.days.split('–').map((d) => d.trim());
+          const a = order.indexOf(from);
+          const b = order.indexOf(to);
+          return a > -1 && b > -1 ? order.slice(a, b + 1) : [h.days];
+        })()
+      : [h.days.trim()];
+
+    return {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: days,
+      opens: h.open,
+      closes: h.close,
+    };
+  });
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': `${site}/#business`,
+  name: business.name,
+  description: hero.subheadline,
+  slogan: business.tagline,
+  url: site,
+  telephone: business.phonePrimary,
+  email: business.email,
+  image: `${site}/img/brand/logo.png`,
+  logo: `${site}/img/brand/logo.png`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: business.street,
+    addressLocality: business.city,
+    addressRegion: business.stateShort,
+    postalCode: business.postal,
+    addressCountry: business.country,
+  },
+  areaServed: [{ '@type': 'City', name: `${business.city}, ${business.state}` }],
+  priceRange: '$$',
+  contactPoint: [
+    { '@type': 'ContactPoint', contactType: 'customer service', telephone: business.phoneSecondary },
+  ],
+  openingHoursSpecification: openingHours,
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Cleaning Services',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.name, description: s.short },
+    })),
+  },
+};
+
+const sameAs = Object.values(business.social).filter(Boolean);
+if (sameAs.length) localBusiness.sameAs = sameAs;
+
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${site}/#website`,
+  url: site,
+  name: business.name,
+  publisher: { '@id': `${site}/#business` },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+<script type="application/ld+json" set:html={JSON.stringify(website)} />

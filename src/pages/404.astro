@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+---
+
+<Layout title="Page Not Found" description="That page has moved or never existed.">
+  <section class="bc-panel--red bc-page-head">
+    <div class="bc-container">
+      <h1>Page Not Found</h1>
+      <p class="bc-lead">That page has moved or never existed. Here is the way back.</p>
+    </div>
+  </section>
+
+  <section class="bc-section">
+    <div class="bc-container" style="text-align:center">
+      <div class="bc-btn-row" style="justify-content:center">
+        <a class="bc-btn bc-btn--primary bc-btn--lg" href="/">Go to homepage</a>
+        <a class="bc-btn bc-btn--outline bc-btn--lg" href="/book-now">Book a cleaning</a>
+      </div>
+    </div>
+  </section>
+
+  <ServicesGrid />
+</Layout>

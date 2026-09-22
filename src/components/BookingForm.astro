@@ -1,0 +1,334 @@
+---
+import Icon from './Icon.astro';
+import {
+  services, propertyTypes, timePreferences,
+  roomOptions, bathroomOptions, sizeOptions, frequencyOptions, contactMethods,
+  business, phoneDigits, whatsappUrl,
+} from '../data/site.js';
+
+interface Props {
+  context?: string;
+}
+const { context = 'page' } = Astro.props;
+
+const steps = [
+  { id: 'services', title: 'Select Services', intro: 'Choose everything you need — you can pick more than one.' },
+  { id: 'property', title: 'Property Details', intro: 'This helps us size the job and quote accurately.' },
+  { id: 'schedule', title: 'Preferred Date & Time', intro: 'Tell us when suits you. We will confirm the exact time with you directly.' },
+  { id: 'contact', title: 'Your Details', intro: 'So we can reach you to confirm.' },
+  { id: 'review', title: 'Review & Submit', intro: 'Check everything over, then send your request.' },
+];
+
+const today = new Date().toISOString().slice(0, 10);
+---
+
+<div class="bc-form-wrap" id="book-now">
+  <div class="bc-alert bc-alert--error" role="alert" tabindex="-1" id="bc-form-errors" hidden>
+    <strong>Please check the following:</strong>
+    <ul></ul>
+  </div>
+
+  <div class="bc-alert bc-alert--success" role="status" tabindex="-1" id="bc-booking-confirmation" hidden>
+    <h3>Thank you — your request is in.</h3>
+    <p>We have received your booking request and sent a confirmation to your email address. A member of the team will be in touch shortly to confirm the details and timing.</p>
+    <p>Need it sooner? Call or message us and we will get straight onto it.</p>
+    <div class="bc-btn-row" style="margin-top:18px">
+      <a class="bc-btn bc-btn--primary" href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
+      <a class="bc-btn bc-btn--whatsapp" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
+    </div>
+  </div>
+
+  <form class="bc-form" id="bc-booking-form" method="POST" action="/api/booking" novalidate>
+    <input type="hidden" name="context" value={context} />
+
+    {/*
+      Spam protection, layer 1: honeypot. A field no human sees, positioned off-screen
+      in CSS rather than hidden, so naive bots still fill it. aria-hidden and tabindex
+      keep it away from screen readers and the keyboard.
+      Layer 2 is the render timestamp below. For layer 3 see the note in api/booking.js.
+    */}
+    <div class="bc-hp" aria-hidden="true">
+      <label for="bc-website">Leave this field empty</label>
+      <input type="text" id="bc-website" name="website" value="" tabindex="-1" autocomplete="off" />
+    </div>
+    <input type="hidden" name="renderedAt" id="bc-rendered-at" value="" />
+
+    <ol class="bc-progress" aria-hidden="true">
+      {steps.map((step, i) => (
+        <li class={`bc-progress__item ${i === 0 ? 'is-active' : ''}`} data-step={i + 1}>
+          <span class="bc-progress__dot">{i + 1}</span>
+          <span class="bc-progress__label">{step.title}</span>
+        </li>
+      ))}
+    </ol>
+
+    <p class="bc-step-counter" role="status" aria-live="polite"></p>
+
+    {/* Step 1 — services */}
+    <fieldset class="bc-step" data-step="1">
+      <legend class="bc-step__legend">
+        <span class="bc-step__num">1</span>
+        <span>
+          <span class="bc-step__title">{steps[0].title}</span>
+          <span class="bc-step__intro">{steps[0].intro}</span>
+        </span>
+      </legend>
+
+      <div class="bc-field" data-field="services">
+        <fieldset class="bc-group" id="bc-field-services" aria-describedby="bc-field-services-error">
+          <legend class="bc-label">
+            Services requested <span class="bc-req" aria-hidden="true">*</span>
+            <span class="screen-reader-text">(required)</span>
+          </legend>
+          <div class="bc-options bc-options--cards">
+            {services.map((s) => (
+              <div class="bc-option">
+                <input type="checkbox" id={`bc-services-${s.slug}`} name="services" value={s.slug} />
+                <label for={`bc-services-${s.slug}`}>
+                  <span class="bc-option__icon" aria-hidden="true"><Icon name={s.icon} size={24} /></span>
+                  <span class="bc-option__text">{s.name}</span>
+                  <span class="bc-option__check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+                  </span>
+                </label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+        <p class="bc-error" id="bc-field-services-error" hidden></p>
+      </div>
+    </fieldset>
+
+    {/* Step 2 — property */}
+    <fieldset class="bc-step" data-step="2">
+      <legend class="bc-step__legend">
+        <span class="bc-step__num">2</span>
+        <span>
+          <span class="bc-step__title">{steps[1].title}</span>
+          <span class="bc-step__intro">{steps[1].intro}</span>
+        </span>
+      </legend>
+
+      <div class="bc-field" data-field="propertyType">
+        <fieldset class="bc-group" id="bc-field-propertyType" aria-describedby="bc-field-propertyType-error">
+          <legend class="bc-label">
+            Property type <span class="bc-req" aria-hidden="true">*</span>
+            <span class="screen-reader-text">(required)</span>
+          </legend>
+          <div class="bc-options bc-options--pills">
+            {propertyTypes.map((t) => (
+              <div class="bc-option">
+                <input type="radio" id={`bc-propertyType-${t.value}`} name="propertyType" value={t.value} />
+                <label for={`bc-propertyType-${t.value}`}>
+                  <span class="bc-option__text">{t.label}</span>
+                  <span class="bc-option__check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+                  </span>
+                </label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+        <p class="bc-error" id="bc-field-propertyType-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="bedrooms">
+        <label class="bc-label" for="bc-field-bedrooms">Bedrooms / rooms</label>
+        <p class="bc-help" id="bc-field-bedrooms-help">For offices and commercial spaces, count the rooms or work areas.</p>
+        <select class="bc-input bc-select" id="bc-field-bedrooms" name="bedrooms" aria-describedby="bc-field-bedrooms-help">
+          <option value="">Please choose…</option>
+          {roomOptions.map((o) => <option value={o}>{o}</option>)}
+        </select>
+        <p class="bc-error" id="bc-field-bedrooms-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="bathrooms">
+        <label class="bc-label" for="bc-field-bathrooms">Bathrooms</label>
+        <select class="bc-input bc-select" id="bc-field-bathrooms" name="bathrooms">
+          <option value="">Please choose…</option>
+          {bathroomOptions.map((o) => <option value={o}>{o}</option>)}
+        </select>
+        <p class="bc-error" id="bc-field-bathrooms-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="propertySize">
+        <label class="bc-label" for="bc-field-propertySize">Approximate size</label>
+        <select class="bc-input bc-select" id="bc-field-propertySize" name="propertySize">
+          <option value="">Please choose…</option>
+          {sizeOptions.map((o) => <option value={o}>{o}</option>)}
+        </select>
+        <p class="bc-error" id="bc-field-propertySize-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="frequency">
+        <label class="bc-label" for="bc-field-frequency">How often</label>
+        <select class="bc-input bc-select" id="bc-field-frequency" name="frequency">
+          <option value="">Please choose…</option>
+          {frequencyOptions.map((o) => <option value={o}>{o}</option>)}
+        </select>
+        <p class="bc-error" id="bc-field-frequency-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="instructions">
+        <label class="bc-label" for="bc-field-instructions">Special instructions</label>
+        <p class="bc-help" id="bc-field-instructions-help">Pets, allergies, access or parking notes, anything needing particular care.</p>
+        <textarea class="bc-input" id="bc-field-instructions" name="instructions" rows="4" maxlength="2000" aria-describedby="bc-field-instructions-help"></textarea>
+        <p class="bc-error" id="bc-field-instructions-error" hidden></p>
+      </div>
+    </fieldset>
+
+    {/* Step 3 — schedule */}
+    <fieldset class="bc-step" data-step="3">
+      <legend class="bc-step__legend">
+        <span class="bc-step__num">3</span>
+        <span>
+          <span class="bc-step__title">{steps[2].title}</span>
+          <span class="bc-step__intro">{steps[2].intro}</span>
+        </span>
+      </legend>
+
+      <div class="bc-field" data-field="preferredDate">
+        <label class="bc-label" for="bc-field-preferredDate">
+          Preferred date <span class="bc-req" aria-hidden="true">*</span>
+          <span class="screen-reader-text">(required)</span>
+        </label>
+        <p class="bc-help" id="bc-field-preferredDate-help">A preference, not a confirmed slot — we will call to agree the exact time.</p>
+        <input class="bc-input" type="date" id="bc-field-preferredDate" name="preferredDate" min={today} required aria-describedby="bc-field-preferredDate-help bc-field-preferredDate-error" />
+        <p class="bc-error" id="bc-field-preferredDate-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="timePreference">
+        <fieldset class="bc-group" id="bc-field-timePreference" aria-describedby="bc-field-timePreference-error">
+          <legend class="bc-label">
+            Time of day <span class="bc-req" aria-hidden="true">*</span>
+            <span class="screen-reader-text">(required)</span>
+          </legend>
+          <div class="bc-options bc-options--pills">
+            {timePreferences.map((t) => (
+              <div class="bc-option">
+                <input type="radio" id={`bc-timePreference-${t.value}`} name="timePreference" value={t.value} />
+                <label for={`bc-timePreference-${t.value}`}>
+                  <span class="bc-option__text">{t.label}</span>
+                  <span class="bc-option__check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+                  </span>
+                </label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+        <p class="bc-error" id="bc-field-timePreference-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="alternateDate">
+        <label class="bc-label" for="bc-field-alternateDate">Backup date</label>
+        <p class="bc-help" id="bc-field-alternateDate-help">Optional. Gives us a second option if your first choice is full.</p>
+        <input class="bc-input" type="date" id="bc-field-alternateDate" name="alternateDate" min={today} aria-describedby="bc-field-alternateDate-help" />
+        <p class="bc-error" id="bc-field-alternateDate-error" hidden></p>
+      </div>
+    </fieldset>
+
+    {/* Step 4 — contact */}
+    <fieldset class="bc-step" data-step="4">
+      <legend class="bc-step__legend">
+        <span class="bc-step__num">4</span>
+        <span>
+          <span class="bc-step__title">{steps[3].title}</span>
+          <span class="bc-step__intro">{steps[3].intro}</span>
+        </span>
+      </legend>
+
+      <div class="bc-field" data-field="fullName">
+        <label class="bc-label" for="bc-field-fullName">
+          Full name <span class="bc-req" aria-hidden="true">*</span>
+          <span class="screen-reader-text">(required)</span>
+        </label>
+        <input class="bc-input" type="text" id="bc-field-fullName" name="fullName" autocomplete="name" maxlength="120" required aria-describedby="bc-field-fullName-error" />
+        <p class="bc-error" id="bc-field-fullName-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="phone">
+        <label class="bc-label" for="bc-field-phone">
+          Phone number <span class="bc-req" aria-hidden="true">*</span>
+          <span class="screen-reader-text">(required)</span>
+        </label>
+        <p class="bc-help" id="bc-field-phone-help">The fastest way for us to confirm your booking.</p>
+        <input class="bc-input" type="tel" id="bc-field-phone" name="phone" autocomplete="tel" maxlength="40" required aria-describedby="bc-field-phone-help bc-field-phone-error" />
+        <p class="bc-error" id="bc-field-phone-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="email">
+        <label class="bc-label" for="bc-field-email">
+          Email address <span class="bc-req" aria-hidden="true">*</span>
+          <span class="screen-reader-text">(required)</span>
+        </label>
+        <input class="bc-input" type="email" id="bc-field-email" name="email" autocomplete="email" maxlength="190" required aria-describedby="bc-field-email-error" />
+        <p class="bc-error" id="bc-field-email-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="address">
+        <label class="bc-label" for="bc-field-address">
+          Service address <span class="bc-req" aria-hidden="true">*</span>
+          <span class="screen-reader-text">(required)</span>
+        </label>
+        <p class="bc-help" id="bc-field-address-help">Where the cleaning takes place, including ZIP code.</p>
+        <textarea class="bc-input" id="bc-field-address" name="address" rows="3" maxlength="400" autocomplete="street-address" required aria-describedby="bc-field-address-help bc-field-address-error"></textarea>
+        <p class="bc-error" id="bc-field-address-error" hidden></p>
+      </div>
+
+      <div class="bc-field" data-field="contactMethod">
+        <fieldset class="bc-group" id="bc-field-contactMethod">
+          <legend class="bc-label">Best way to reach you</legend>
+          <div class="bc-options bc-options--pills">
+            {contactMethods.map((m) => (
+              <div class="bc-option">
+                <input type="radio" id={`bc-contactMethod-${m.value}`} name="contactMethod" value={m.value} />
+                <label for={`bc-contactMethod-${m.value}`}>
+                  <span class="bc-option__text">{m.label}</span>
+                  <span class="bc-option__check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
+                  </span>
+                </label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+        <p class="bc-error" id="bc-field-contactMethod-error" hidden></p>
+      </div>
+    </fieldset>
+
+    {/* Step 5 — review */}
+    <fieldset class="bc-step" data-step="5">
+      <legend class="bc-step__legend">
+        <span class="bc-step__num">5</span>
+        <span>
+          <span class="bc-step__title">{steps[4].title}</span>
+          <span class="bc-step__intro">{steps[4].intro}</span>
+        </span>
+      </legend>
+
+      <div class="bc-review" data-bc-review>
+        <p class="bc-review__fallback">Please scroll up and check your answers, then send your request below.</p>
+      </div>
+
+      <div class="bc-consent">
+        <p>We use the details above only to contact you about this booking. We never sell or share your information.</p>
+      </div>
+    </fieldset>
+
+    <div class="bc-form__nav">
+      <button type="button" class="bc-btn bc-btn--outline bc-form__back" hidden>Back</button>
+      <button type="button" class="bc-btn bc-btn--primary bc-form__next" hidden>Continue</button>
+      <button type="submit" class="bc-btn bc-btn--primary bc-btn--lg bc-form__submit">Send My Booking Request</button>
+    </div>
+
+    <p class="bc-form__note">
+      No payment is taken now. We review every request and confirm the details with you personally before anything is scheduled.
+    </p>
+  </form>
+</div>
+
+<script>
+  import { initBookingForm } from '../scripts/booking-form.js';
+  initBookingForm();
+</script>

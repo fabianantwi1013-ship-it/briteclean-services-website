@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import { testimonials } from '../data/site.js';
+---
+
+<section class="bc-section" id="reviews">
+  <div class="bc-container">
+    <div class="bc-section__head">
+      <span class="bc-eyebrow">Reviews</span>
+      <h2>What Our Customers Say</h2>
+      <p>Real feedback from homes and businesses across the Tri-State area.</p>
+    </div>
+
+    <div class="bc-grid bc-grid--3">
+      {testimonials.map((t) => (
+        <figure class="bc-quote">
+          <span class="bc-quote__mark" aria-hidden="true"><Icon name="quote" size={28} /></span>
+          <div class="bc-quote__stars">
+            <span aria-hidden="true">{'★'.repeat(Math.max(0, Math.min(5, t.rating)))}</span>
+            <span class="screen-reader-text">Rated {t.rating} out of 5</span>
+          </div>
+          <blockquote>{t.quote}</blockquote>
+          <figcaption class="bc-quote__author">
+            <span class="bc-quote__name">{t.author}</span>
+            <span class="bc-quote__place">{t.location}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+import { whatsappUrl } from '../data/site.js';
+
+const label = 'Book via WhatsApp';
+---
+
+<a class="bc-whatsapp-float" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
+  <Icon name="whatsapp" size={24} />
+  <span class="bc-whatsapp-float__label">{label}</span>
+  <span class="screen-reader-text">{label} — opens WhatsApp in a new tab</span>
+</a>

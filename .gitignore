@@ -1,68 +1,52 @@
 # =============================================================================
 # Briteclean Services LLC
 #
-# This repository tracks only the code we wrote: the theme, the plugin and the
-# docs. WordPress core, the database and uploads are NOT part of it — they live
-# in the LocalWP site and are recreated by migration, not by git.
-#
-# wp-content is handled as an allowlist rather than a blocklist: everything is
-# ignored unless explicitly un-ignored below. That way installing a plugin or
-# dropping a migration export into the tree can never quietly end up in a commit.
+# Astro static site + Vercel serverless functions.
+# The wp-content/ tree is the superseded WordPress build, kept for history.
 # =============================================================================
 
-# --- wp-content: ignore everything, then allow only ours ---------------------
-wp-content/*
-!wp-content/themes/
-wp-content/themes/*
-!wp-content/themes/briteclean/
+# --- Node / Astro / Vercel -------------------------------------------------
+node_modules/
+dist/
+dist-wp/
+.astro/
+.vercel/
+.output/
+*.tsbuildinfo
 
-!wp-content/plugins/
-wp-content/plugins/*
-!wp-content/plugins/briteclean-bookings/
-
-# --- WordPress core, in case a full install is ever copied in ----------------
-/wp-admin/
-/wp-includes/
-/wp-*.php
-/index.php
-/license.txt
-/readme.html
-/xmlrpc.php
-wp-config.php
-wp-config-local.php
-
-# --- Secrets and environment -------------------------------------------------
+# --- Secrets ----------------------------------------------------------------
+# .env holds the Resend API key. Never commit it; .env.example documents the shape.
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 
-# --- Customer data: never commit this ----------------------------------------
-# The CSV export contains customers' names, phone numbers, email addresses and
-# home addresses. It must not go anywhere near version control.
+# --- Customer data ----------------------------------------------------------
+# Any exported booking data contains names, phone numbers, emails and home
+# addresses. It must not go near version control.
 briteclean-bookings-*.csv
 *.sql
 *.sql.gz
 *.wpress
 
-# --- Logs and debug ----------------------------------------------------------
+# --- Legacy WordPress: allowlist only our own code --------------------------
+wp-content/*
+!wp-content/themes/
+wp-content/themes/*
+!wp-content/themes/briteclean/
+!wp-content/plugins/
+wp-content/plugins/*
+!wp-content/plugins/briteclean-bookings/
+wp-config.php
+
+# --- Logs -------------------------------------------------------------------
 *.log
-debug.log
-error_log
-
-# --- Build output from bin/package.sh -----------------------------------------
-dist/
-
-# --- Build tooling, if a Sass step is added later ----------------------------
-node_modules/
 npm-debug.log*
-yarn-error.log*
-.sass-cache/
-*.css.map
+debug.log
 
-# --- Editors and OS ----------------------------------------------------------
+# --- Editors and OS ---------------------------------------------------------
 .DS_Store
-.DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
@@ -72,8 +56,3 @@ Thumbs.db
 *.swp
 *~
 .claude/
-
-# --- Notes ---
-# assets/img/placeholders/*.jpg IS tracked — those are deliverables.
-# wp-content/themes/briteclean/acf-json/ IS tracked — that is the point of ACF
-# JSON sync: field changes made in wp-admin get written to disk and committed.

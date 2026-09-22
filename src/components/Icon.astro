@@ -1,0 +1,58 @@
+---
+/**
+ * Inline SVG icons.
+ *
+ * Inline rather than a sprite or icon font: no extra request, no flash of unstyled
+ * icon, and `currentColor` means one definition works on both the red and white panels.
+ */
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 24, class: className = '' } = Astro.props;
+
+const paths: Record<string, string> = {
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>',
+  briefcase: '<rect x="2.5" y="7" width="19" height="13" rx="2"/><path d="M8.5 7V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2"/><path d="M2.5 12.5h19"/>',
+  sparkle: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8z"/>',
+  building: '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8.5 7h1.5M14 7h1.5M8.5 11h1.5M14 11h1.5M8.5 15h1.5M14 15h1.5"/><path d="M10 21v-3h4v3"/>',
+  window: '<rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M12 3.5v17M3.5 12h17"/>',
+  box: '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
+  broom: '<path d="M14 3 9.5 7.5"/><path d="m8 6 4 4"/><path d="M11 9 5.5 14.5a3 3 0 0 0-.8 1.5L4 21l5-.7a3 3 0 0 0 1.5-.8L16 14z"/>',
+  bolt: '<path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12z"/>',
+  check: '<path d="m4.5 12.5 5 5 10-11"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  shield: '<path d="M12 3l7.5 3v6c0 4.3-3 8.2-7.5 9.5C7.5 20.2 4.5 16.3 4.5 12V6z"/><path d="m9 12 2 2 4-4"/>',
+  leaf: '<path d="M20 4c0 9-5.5 14-13 14a7 7 0 0 1 0-14c4 0 6-2 13 0z"/><path d="M4.5 19.5C8 16 12 13.5 17 11.5"/>',
+  heart: '<path d="M12 20.5C6.5 16.5 3 13.4 3 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 9 2.5c0 3.9-3.5 7-9 11z"/>',
+  star: '<path d="m12 3.5 2.6 5.5 5.9.8-4.3 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9L3.5 9.8l5.9-.8z"/>',
+  phone: '<path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/>',
+  mail: '<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 6.5 9 6 9-6"/>',
+  pin: '<path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5.5l3.5 2"/>',
+  whatsapp: '<path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.3-1.4A9.9 9.9 0 1 0 12.04 2z"/><path d="M8.6 7.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2 0 .4-.1.6l-.5.6c-.1.2-.2.3 0 .6a7.4 7.4 0 0 0 3.4 3c.3.1.5.1.6 0l.7-.8c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.4.5a2 2 0 0 1-1.4 1.8c-.5.2-1.2.3-3.5-.7a11 11 0 0 1-4.8-4.6c-.9-1.6-.6-2.7-.3-3.3z"/>',
+  arrow: '<path d="M4 12h15"/><path d="m13 6 6 6-6 6"/>',
+  quote: '<path d="M9.5 6C6.5 7.5 5 10 5 13v5h6v-6H8c0-2 .6-3.3 2.5-4.3zM19.5 6C16.5 7.5 15 10 15 13v5h6v-6h-3c0-2 .6-3.3 2.5-4.3z"/>',
+};
+
+// Fill-style icons read better solid; the rest are stroked outlines.
+const solid = ['bolt', 'star', 'heart', 'sparkle', 'whatsapp', 'quote'].includes(name);
+const d = paths[name] ?? paths.check;
+---
+
+<svg
+  class={`bc-icon ${className}`}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill={solid ? 'currentColor' : 'none'}
+  stroke={solid ? 'none' : 'currentColor'}
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  set:html={d}
+/>

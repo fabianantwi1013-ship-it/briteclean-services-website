@@ -1,0 +1,15 @@
+---
+import Icon from './Icon.astro';
+import { trustBadges } from '../data/site.js';
+---
+
+<section class="bc-trust">
+  <div class="bc-container bc-trust__inner">
+    {trustBadges.map((badge) => (
+      <div class="bc-trust__item">
+        <span class="bc-trust__icon" aria-hidden="true"><Icon name={badge.icon} size={18} /></span>
+        <span>{badge.title}</span>
+      </div>
+    ))}
+  </div>
+</section>

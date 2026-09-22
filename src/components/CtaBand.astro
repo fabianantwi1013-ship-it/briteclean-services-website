@@ -1,0 +1,23 @@
+---
+import Icon from './Icon.astro';
+import { business, phoneDigits } from '../data/site.js';
+---
+
+<section class="bc-section bc-panel--red bc-cta-band">
+  <div class="bc-container">
+    <span class="bc-eyebrow">{business.taglineSecondary}</span>
+    <h2>Ready for a Sparkling Clean Space?</h2>
+    <p>Tell us what you need and when you need it. We will confirm your booking personally — usually the same day.</p>
+
+    <div class="bc-btn-row">
+      <a class="bc-btn bc-btn--gold bc-btn--lg" href="/book-now">
+        Get a Free Quote
+        <Icon name="arrow" size={18} />
+      </a>
+      <a class="bc-btn bc-btn--ghost-light bc-btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
+        <Icon name="phone" size={18} />
+        {business.phonePrimary}
+      </a>
+    </div>
+  </div>
+</section>

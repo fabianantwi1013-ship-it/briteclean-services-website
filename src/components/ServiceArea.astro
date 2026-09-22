@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+import { business } from '../data/site.js';
+---
+
+<section class="bc-section bc-section--tight bc-section--tint">
+  <div class="bc-container">
+    <div class="bc-area">
+      <span class="bc-medallion bc-medallion--lg" aria-hidden="true"><Icon name="pin" size={30} /></span>
+      <div>
+        <h3 style="margin-bottom:.3em">Areas We Serve</h3>
+        <p>{business.serviceArea}</p>
+        <p style="margin-top:.6em;font-size:.92rem;color:var(--bc-muted)">
+          Not sure if we reach you? Call or message us — we will tell you straight away.
+        </p>
+      </div>
+      <a class="bc-btn bc-btn--outline" href="/contact">Contact Us</a>
+    </div>
+  </div>
+</section>

@@ -12,7 +12,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DIST="$ROOT/dist"
+DIST="$ROOT/dist-wp"
 
 rm -rf "$DIST"
 mkdir -p "$DIST"
@@ -31,11 +31,11 @@ echo
 
 cd "$ROOT/wp-content/themes"
 zip -rq "$DIST/briteclean-theme.zip" briteclean "${EXCLUDES[@]}"
-echo "  ✓ dist/briteclean-theme.zip        ($(du -h "$DIST/briteclean-theme.zip" | cut -f1))"
+echo "  ✓ dist-wp/briteclean-theme.zip        ($(du -h "$DIST/briteclean-theme.zip" | cut -f1))"
 
 cd "$ROOT/wp-content/plugins"
 zip -rq "$DIST/briteclean-bookings.zip" briteclean-bookings "${EXCLUDES[@]}"
-echo "  ✓ dist/briteclean-bookings.zip     ($(du -h "$DIST/briteclean-bookings.zip" | cut -f1))"
+echo "  ✓ dist-wp/briteclean-bookings.zip     ($(du -h "$DIST/briteclean-bookings.zip" | cut -f1))"
 
 echo
 echo "Both zips are ready to upload through wp-admin."

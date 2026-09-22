@@ -1,0 +1,6 @@
+# The legacy WordPress build — kept in git history, never deployed.
+wp-content/
+bin/
+docs/
+dist-wp/
+node_modules/

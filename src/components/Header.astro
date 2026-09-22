@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+import { business, phoneDigits } from '../data/site.js';
+
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/services', label: 'Services' },
+  { href: '/about', label: 'About' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/book-now', label: 'Book Now' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<div class="bc-topbar">
+  <div class="bc-container bc-topbar__inner">
+    <a href={`tel:+${phoneDigits(business.phonePrimary)}`}>
+      <Icon name="phone" size={15} />
+      <span>{business.phonePrimary}</span>
+    </a>
+    <span class="bc-topbar__tagline">{business.tagline}</span>
+    <a href="/contact">
+      <Icon name="pin" size={15} />
+      <span>{business.city}, {business.state}</span>
+    </a>
+  </div>
+</div>
+
+<header class="bc-header">
+  <div class="bc-container bc-header__inner">
+    <a class="bc-brand bc-brand__logo" href="/" rel="home">
+      <img src="/img/brand/logo.png" alt={`${business.name} — ${business.tagline}`} width="386" height="148" />
+    </a>
+
+    <button class="bc-nav-toggle" type="button" aria-expanded="false" aria-controls="bc-primary-nav">
+      <span class="bc-nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span>Menu</span>
+    </button>
+
+    <nav class="bc-nav" id="bc-primary-nav" aria-label="Primary navigation">
+      <ul>
+        {nav.map((item) => (
+          <li class={path === item.href.replace(/\/$/, '') || (item.href === '/' && path === '/') ? 'current-menu-item' : ''}>
+            <a href={item.href} aria-current={path === item.href.replace(/\/$/, '') ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="bc-btn bc-btn--primary bc-btn--sm bc-header__cta" href="/book-now">Book Now</a>
+  </div>
+</header>

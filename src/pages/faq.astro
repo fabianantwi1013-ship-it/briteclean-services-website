@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { faqs } from '../data/site.js';
+
+// FAQPage structured data — this is the markup that can earn an expanded result in
+// Google, and it costs nothing since the questions are right here.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout
+  title="Frequently Asked Questions"
+  description="Answers about booking, payment, access, supplies, staff vetting and our satisfaction guarantee."
+>
+  <PageHead title="FAQ" subtitle="The questions we get asked most." />
+
+  <section class="bc-section">
+    <div class="bc-container">
+      <div class="bc-faq">
+        {faqs.map((faq, i) => (
+          <details open={i === 0}>
+            <summary>{faq.q}</summary>
+            <div class="bc-faq__body">{faq.a}</div>
+          </details>
+        ))}
+      </div>
+
+      <div class="bc-btn-row" style="justify-content:center;margin-top:40px">
+        <a class="bc-btn bc-btn--primary bc-btn--lg" href="/book-now">Book a cleaning</a>
+        <a class="bc-btn bc-btn--outline bc-btn--lg" href="/contact">Ask us something else</a>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</Layout>

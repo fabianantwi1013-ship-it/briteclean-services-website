@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import Icon from '../components/Icon.astro';
+import WhyChooseUs from '../components/WhyChooseUs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { services } from '../data/site.js';
+import alts from '../data/photo-alt.json';
+---
+
+<Layout
+  title="Cleaning Services"
+  description="Residential, office, deep, commercial, window, move-in, general and emergency cleaning across West Chester, Ohio and surrounding areas."
+>
+  <PageHead title="Services" subtitle="Eight services covering homes, workplaces and everything in between." />
+
+  <section class="bc-section">
+    <div class="bc-container">
+      <div class="bc-section__head">
+        <span class="bc-eyebrow">Full service list</span>
+        <h2>Everything We Clean</h2>
+        <p>Not sure which you need? Ask us and we will scope it with you.</p>
+      </div>
+
+      <div class="bc-btn-row" style="justify-content:center;margin-bottom:44px">
+        {services.map((s) => (
+          <a class="bc-pill" href={`#${s.slug}`}>
+            <span class="bc-pill__dot" aria-hidden="true"><Icon name="check" size={14} /></span>
+            {s.name}
+          </a>
+        ))}
+      </div>
+
+      {services.map((service) => (
+        <article class="bc-service-detail" id={service.slug}>
+          <div class="bc-service-detail__head">
+            <span class="bc-medallion bc-medallion--lg" aria-hidden="true"><Icon name={service.icon} size={32} /></span>
+            <h2>{service.name}</h2>
+            <a class="bc-btn bc-btn--primary bc-btn--sm" href={`/book-now?service=${service.slug}`}>
+              Book this
+              <Icon name="arrow" size={15} />
+            </a>
+          </div>
+          <div>
+            <p class="bc-lead" style="color:var(--bc-ink);font-weight:600">{service.short}</p>
+            <div class="bc-content"><p>{service.long}</p></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <WhyChooseUs />
+  <CtaBand />
+</Layout>

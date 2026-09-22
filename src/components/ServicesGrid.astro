@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+import { services } from '../data/site.js';
+---
+
+<section class="bc-section bc-section--soft" id="services">
+  <div class="bc-container">
+    <div class="bc-section__head">
+      <span class="bc-eyebrow">What we do</span>
+      <h2>Our Cleaning Services</h2>
+      <p>Homes, offices and commercial spaces — booked around your schedule, cleaned to a standard you can see.</p>
+    </div>
+
+    <div class="bc-grid bc-grid--4">
+      {services.map((service) => (
+        <a class="bc-service-card" href={`/services#${service.slug}`}>
+          <span class="bc-medallion" aria-hidden="true"><Icon name={service.icon} size={26} /></span>
+          <h3>{service.name}</h3>
+          <p>{service.short}</p>
+          <span class="bc-service-card__more">
+            Learn more
+            <Icon name="arrow" size={15} />
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <div class="bc-btn-row" style="justify-content:center;margin-top:36px">
+      <a class="bc-btn bc-btn--primary bc-btn--lg" href="/book-now">
+        Book a Cleaning
+        <Icon name="arrow" size={18} />
+      </a>
+    </div>
+  </div>
+</section>

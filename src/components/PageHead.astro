@@ -1,0 +1,19 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+const { title, subtitle } = Astro.props;
+---
+
+<section class="bc-panel--red bc-page-head">
+  <div class="bc-container">
+    <nav class="bc-breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true"> / </span>
+      <span>{title}</span>
+    </nav>
+    <h1>{title}</h1>
+    {subtitle && <p class="bc-lead">{subtitle}</p>}
+  </div>
+</section>

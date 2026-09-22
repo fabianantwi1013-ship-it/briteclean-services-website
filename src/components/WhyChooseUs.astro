@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro';
+import { valueProps, business } from '../data/site.js';
+---
+
+<section class="bc-section bc-panel--red" id="why-us">
+  <div class="bc-container">
+    <div class="bc-section__head">
+      <span class="bc-eyebrow">The difference</span>
+      <h2>Why Choose {business.name}?</h2>
+    </div>
+
+    <div class="bc-why">
+      {valueProps.map((prop) => (
+        <div class="bc-why__item">
+          <span class="bc-medallion bc-medallion--gold" aria-hidden="true"><Icon name={prop.icon} size={24} /></span>
+          <div>
+            <h3>{prop.title}</h3>
+            <p>{prop.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
