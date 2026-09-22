@@ -153,6 +153,7 @@ function briteclean_run_seeder() {
 	$log = array_merge( $log, briteclean_seed_testimonials() );
 	// After pages and products exist — each photo attaches to one of them.
 	$log = array_merge( $log, briteclean_seed_photos() );
+	$log = array_merge( $log, briteclean_seed_logo() );
 	$log = array_merge( $log, briteclean_seed_menus() );
 
 	flush_rewrite_rules();
@@ -421,6 +422,82 @@ function briteclean_seed_menus() {
 	}
 
 	set_theme_mod( 'nav_menu_locations', $locations );
+
+	return $log;
+}
+
+/**
+ * Install the bundled logo as the site's custom logo.
+ *
+ * The logo is white and gold on red — it was drawn for the flyer's red field and is
+ * invisible on a white background — so the shipped asset keeps a rounded red tile
+ * behind it rather than being keyed to transparency.
+ *
+ * Skipped entirely if a logo has already been set, so re-running never overwrites the
+ * client's own upload.
+ *
+ * @return array Log lines.
+ */
+function briteclean_seed_logo() {
+	$log = array();
+
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+
+	// Header logo and browser-tab icon are handled independently: having set one is
+	// no reason to skip the other.
+	$targets = array(
+		'logo'      => array(
+			'file' => 'logo.png',
+			'alt'  => __( 'Briteclean Services LLC — Clean Spaces, Healthy Lives', 'briteclean' ),
+			'set'  => (bool) get_theme_mod( 'custom_logo' ),
+			'done' => __( 'Set the site logo.', 'briteclean' ),
+			'skip' => __( 'A site logo is already set — left alone.', 'briteclean' ),
+		),
+		'site_icon' => array(
+			'file' => 'site-icon.png',
+			'alt'  => __( 'Briteclean Services LLC icon', 'briteclean' ),
+			'set'  => (bool) get_option( 'site_icon' ),
+			'done' => __( 'Set the browser tab icon.', 'briteclean' ),
+			'skip' => __( 'A browser tab icon is already set — left alone.', 'briteclean' ),
+		),
+	);
+
+	foreach ( $targets as $key => $target ) {
+		if ( $target['set'] ) {
+			$log[] = $target['skip'];
+			continue;
+		}
+
+		$path = BRITECLEAN_DIR . '/assets/img/brand/' . $target['file'];
+
+		if ( ! file_exists( $path ) ) {
+			continue;
+		}
+
+		$attachment_id = briteclean_find_placeholder_attachment( $target['file'] );
+
+		if ( ! $attachment_id ) {
+			$attachment_id = briteclean_sideload_placeholder(
+				$path,
+				$target['file'],
+				array( 'alt' => $target['alt'] )
+			);
+		}
+
+		if ( is_wp_error( $attachment_id ) || ! $attachment_id ) {
+			continue;
+		}
+
+		if ( 'logo' === $key ) {
+			set_theme_mod( 'custom_logo', $attachment_id );
+		} else {
+			update_option( 'site_icon', $attachment_id );
+		}
+
+		$log[] = $target['done'];
+	}
 
 	return $log;
 }

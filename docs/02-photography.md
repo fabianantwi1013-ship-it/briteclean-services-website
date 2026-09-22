@@ -1,4 +1,37 @@
-# Placeholder Photography
+# Brand Assets & Placeholder Photography
+
+## Logo and site icon
+
+`assets/img/brand/` holds two files, both cut from the client's flyer and installed
+automatically by the seeder:
+
+| File | Used as | Size |
+| --- | --- | --- |
+| `logo.png` | Header logo (Customizer → Site Identity) | 386×148 |
+| `site-icon.png` | Browser tab / home-screen icon | 512×512 |
+
+**Why the logo keeps a red background.** The mark is white and gold — it was drawn for
+the flyer's red field. Keyed to transparency it becomes white-on-white and disappears
+against the theme's white header. So the shipped asset is the lockup on a rounded red
+tile, which reads as an intentional brand block rather than a cut-out.
+
+**Quality ceiling — worth fixing.** Both files were extracted from a 1280px-wide JPEG,
+so `logo.png` is 386px across. That is fine at its rendered size (~146×56 CSS px, so
+roughly 2.6× density on retina) but it will not survive being scaled up, and JPEG
+artefacts are baked in.
+
+Ask the client for the original logo file from whoever designed the flyer — ideally
+`.ai`, `.eps` or `.svg`, plus a transparent `.png` at 1000px or wider. Two variants are
+worth requesting while you are asking:
+
+1. The standard white/gold version (for red and dark backgrounds)
+2. A **dark or full-colour version for light backgrounds** — that one removes the need
+   for the red tile entirely
+
+Drop replacements into `assets/img/brand/` with the same filenames, or just upload via
+**Customize → Site Identity**, which takes precedence over the bundled files.
+
+## Placeholder photography
 
 Ten Pexels photographs ship with the theme in
 `wp-content/themes/briteclean/assets/img/placeholders/` (832 KB total). They are
