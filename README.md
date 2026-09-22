@@ -18,6 +18,35 @@ cleaning website/
 These two folders symlink into a LocalWP site's `wp-content/`. WordPress core is never
 copied into this project — only the code that is actually ours.
 
+## Verification status
+
+Verified on **2026-09-22** against real WordPress 7.1.1, ACF 6.8.10 and WooCommerce
+11.1.1, running on PHP 8.2.29 (the build LocalWP bundles) with SQLite.
+
+| Area | Status |
+| --- | --- |
+| PHP lint, all 38 files | ✅ pass |
+| Validator unit checks (13 rules + 4 security behaviours) | ✅ pass |
+| Seeder: 6 pages, 8 products, 3 testimonials, 2 menus, 10 photos attached | ✅ pass |
+| Booking submit → CPT record with every field correct | ✅ pass |
+| Owner + customer emails, correct Reply-To on each | ✅ pass |
+| Spam: honeypot, both time-trap bounds, forged timestamp, bad nonce | ✅ all rejected |
+| Error state: text, checkbox and radio repopulate; token is one-shot | ✅ pass |
+| Contact form: valid sends, honeypot drops, bad email errors | ✅ pass |
+| WooCommerce catalog-only: no add-to-cart, /cart/ → /book-now/ | ✅ pass |
+| Admin: list table, edit screen, export page, setup page, testimonials | ✅ render clean |
+| CSV export: valid, BOM, 19 columns, formula injection neutralised | ✅ pass |
+| LocalBusiness + FAQPage JSON-LD valid | ✅ pass |
+| PHP warnings / notices / deprecations / 5xx | ✅ none |
+| Mobile at 375px | ✅ pass |
+
+Three bugs were found and fixed by that first run — a fatal error from a wrong filter
+hook, opening hours silently missing from the schema because a regex lacked `/u`, and
+an unreadable hero headline at 2.96:1 contrast. See commit `2744d69`.
+
+Not yet exercised: keyboard-only navigation of the booking form, screen-reader output,
+real SMTP delivery, and behaviour under MySQL rather than SQLite.
+
 ## Architecture decisions
 
 **Custom booking form, not WPForms or Gravity Forms.** Multi-step is a paid feature in
