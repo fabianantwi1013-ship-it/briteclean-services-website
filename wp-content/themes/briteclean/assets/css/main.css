@@ -378,21 +378,21 @@ p:last-child { margin-bottom: 0; }
 	letter-spacing: -.02em;
 }
 .bc-brand__tag { font-size: .72rem; font-weight: 700; color: var(--bc-red); letter-spacing: .02em; }
-/* Logo sizing. The bundled lockup is 2.6:1, so height drives the width: 52px tall
-   renders ~136px wide, 76px tall renders ~198px. Kept smaller on phones so the logo
+/* Logo sizing. The bundled lockup is 2.6:1, so height drives the width: 60px tall
+   renders ~156px wide, 88px tall renders ~229px. Kept smaller on phones so the logo
    and the Menu button still fit side by side at 375px. */
 .bc-brand__logo img {
-	max-height: 52px;
+	max-height: 60px;
 	width: auto;
 	display: block;
 }
 
 @media (min-width: 560px) {
-	.bc-brand__logo img { max-height: 64px; }
+	.bc-brand__logo img { max-height: 74px; }
 }
 
 @media (min-width: 980px) {
-	.bc-brand__logo img { max-height: 76px; }
+	.bc-brand__logo img { max-height: 88px; }
 }
 
 .bc-nav-toggle {
