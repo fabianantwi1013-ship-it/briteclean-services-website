@@ -1,0 +1,458 @@
+/*
+ * Briteclean booking form.
+ *
+ * Inherits the brand tokens from the theme's main.css. The fallbacks in var() keep the
+ * form usable if the plugin is ever run under a different theme.
+ */
+
+.bc-form-wrap {
+	--bcf-red: var(--bc-red, #C8102E);
+	--bcf-gold: var(--bc-gold, #F5B800);
+	--bcf-ink: var(--bc-ink, #1A1A1A);
+	--bcf-muted: var(--bc-muted, #6B7280);
+	--bcf-line: var(--bc-line, #E5E7EB);
+	--bcf-radius: var(--bc-radius-lg, 22px);
+
+	max-width: 820px;
+	margin-inline: auto;
+}
+
+.bc-form {
+	background: #fff;
+	border: 1px solid var(--bcf-line);
+	border-radius: var(--bcf-radius);
+	padding: clamp(22px, 4vw, 40px);
+	box-shadow: 0 4px 12px rgba(26, 26, 26, .06), 0 12px 32px rgba(26, 26, 26, .06);
+}
+
+/* ---- Honeypot ------------------------------------------------------------
+   Positioned off-screen rather than display:none, because some bots skip
+   display:none fields. Real users never see or tab to it. */
+.bc-hp {
+	position: absolute !important;
+	left: -9999px !important;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+/* ---- Progress ---------------------------------------------------------- */
+
+.bc-progress {
+	display: none;
+	list-style: none;
+	margin: 0 0 30px;
+	padding: 0;
+	gap: 4px;
+}
+.bc-form.is-enhanced .bc-progress { display: flex; }
+
+.bc-progress__item {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 7px;
+	position: relative;
+	text-align: center;
+}
+/* Connector line between the step dots. */
+.bc-progress__item:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	top: 15px;
+	left: calc(50% + 20px);
+	right: calc(-50% + 20px);
+	height: 2px;
+	background: var(--bcf-line);
+}
+.bc-progress__item.is-done:not(:last-child)::after { background: var(--bcf-red); }
+
+.bc-progress__dot {
+	display: grid;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: #fff;
+	border: 2px solid var(--bcf-line);
+	color: var(--bcf-muted);
+	font-weight: 800;
+	font-size: .85rem;
+	position: relative;
+	z-index: 1;
+	transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+.bc-progress__item.is-active .bc-progress__dot {
+	background: var(--bcf-red);
+	border-color: var(--bcf-red);
+	color: #fff;
+}
+.bc-progress__item.is-done .bc-progress__dot {
+	background: var(--bcf-red);
+	border-color: var(--bcf-red);
+	color: #fff;
+}
+
+.bc-progress__label {
+	font-size: .72rem;
+	font-weight: 700;
+	color: var(--bcf-muted);
+	line-height: 1.25;
+	display: none;
+}
+.bc-progress__item.is-active .bc-progress__label { color: var(--bcf-ink); }
+
+@media (min-width: 640px) {
+	.bc-progress__label { display: block; }
+}
+
+.bc-step-counter {
+	display: none;
+	margin: 0 0 18px;
+	font-size: .8rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	color: var(--bcf-red);
+}
+.bc-form.is-enhanced .bc-step-counter { display: block; }
+
+/* ---- Steps -------------------------------------------------------------
+   Every step is visible by default. Only once JS marks the form as enhanced
+   do the inactive ones hide — so a failed script leaves a working long form. */
+
+.bc-step {
+	border: 0;
+	margin: 0 0 34px;
+	padding: 0;
+	min-inline-size: 0; /* Firefox: stops fieldset forcing its content wide. */
+}
+.bc-form.is-enhanced .bc-step { display: none; margin-bottom: 0; }
+.bc-form.is-enhanced .bc-step.is-active { display: block; }
+
+.bc-step__legend {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	width: 100%;
+	margin-bottom: 22px;
+	padding: 0;
+}
+.bc-step__num {
+	display: grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	flex: 0 0 38px;
+	border-radius: 50%;
+	background: var(--bcf-red);
+	color: #fff;
+	font-weight: 800;
+	font-size: .95rem;
+}
+.bc-form.is-enhanced .bc-step__num { display: none; }
+
+.bc-step__title {
+	display: block;
+	font-family: var(--bc-font-heading, system-ui, sans-serif);
+	font-weight: 800;
+	font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+	color: var(--bcf-ink);
+	line-height: 1.25;
+}
+.bc-step__intro {
+	display: block;
+	margin-top: 4px;
+	font-size: .92rem;
+	color: var(--bcf-muted);
+	font-weight: 400;
+}
+
+/* ---- Fields ------------------------------------------------------------- */
+
+.bc-field { margin-bottom: 22px; }
+.bc-field:last-child { margin-bottom: 0; }
+
+.bc-label {
+	display: block;
+	margin-bottom: 7px;
+	font-weight: 700;
+	font-size: .95rem;
+	color: var(--bcf-ink);
+}
+.bc-req { color: var(--bcf-red); margin-left: 2px; }
+
+.bc-help {
+	margin: -2px 0 9px;
+	font-size: .85rem;
+	color: var(--bcf-muted);
+	line-height: 1.5;
+}
+
+.bc-group { border: 0; margin: 0; padding: 0; min-inline-size: 0; }
+
+.bc-input {
+	display: block;
+	width: 100%;
+	padding: 13px 16px;
+	font: inherit;
+	font-size: 1rem; /* 16px minimum: anything smaller makes iOS zoom on focus. */
+	color: var(--bcf-ink);
+	background: #fff;
+	border: 2px solid var(--bcf-line);
+	border-radius: 12px;
+	transition: border-color .15s ease, box-shadow .15s ease;
+	min-height: 50px;
+}
+.bc-input:hover { border-color: #d4d4d8; }
+.bc-input:focus {
+	outline: none;
+	border-color: var(--bcf-red);
+	box-shadow: 0 0 0 4px rgba(200, 16, 46, .12);
+}
+.bc-input:focus-visible { outline: 2px solid transparent; }
+
+textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
+
+.bc-select {
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 9 7 7 7-7'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 16px center;
+	padding-right: 44px;
+}
+
+.bc-field--error .bc-input { border-color: #DC2626; }
+.bc-field--error .bc-label { color: #B91C1C; }
+
+.bc-error {
+	margin: 7px 0 0;
+	font-size: .86rem;
+	font-weight: 600;
+	color: #B91C1C;
+}
+.bc-error[hidden] { display: none; }
+
+/* ---- Option cards & pills ----------------------------------------------- */
+
+.bc-options { display: grid; gap: 10px; }
+.bc-options--cards { grid-template-columns: repeat(2, 1fr); }
+.bc-options--pills { grid-template-columns: 1fr; }
+
+@media (min-width: 560px) {
+	.bc-options--pills { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 680px) {
+	.bc-options--cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bc-option { position: relative; }
+
+/* The input stays in the accessibility tree and keeps native keyboard behaviour;
+   it is simply drawn behind the label, which carries all the styling. */
+.bc-option input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+}
+
+.bc-option label {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	height: 100%;
+	padding: 18px 12px;
+	text-align: center;
+	background: #fff;
+	border: 2px solid var(--bcf-line);
+	border-radius: 16px;
+	cursor: pointer;
+	font-weight: 700;
+	font-size: .9rem;
+	color: var(--bcf-ink);
+	line-height: 1.3;
+	transition: border-color .15s ease, background-color .15s ease, transform .12s ease;
+	position: relative;
+	min-height: 48px;
+}
+.bc-options--pills label {
+	flex-direction: row;
+	padding: 14px 16px;
+	border-radius: 999px;
+	font-size: .92rem;
+}
+
+.bc-option label:hover { border-color: rgba(200, 16, 46, .4); background: #FFFBFB; }
+
+.bc-option input:checked + label {
+	border-color: var(--bcf-red);
+	background: var(--bc-bg-tint, #FDF2F4);
+}
+
+/* The focus ring must sit on the label, since the real input is visually hidden. */
+.bc-option input:focus-visible + label {
+	outline: 3px solid var(--bcf-gold);
+	outline-offset: 2px;
+}
+
+.bc-option__icon { color: var(--bcf-red); line-height: 0; }
+.bc-option input:checked + label .bc-option__icon { color: var(--bcf-red); }
+
+.bc-option__check {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	display: grid;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: var(--bcf-red);
+	color: #fff;
+	opacity: 0;
+	transform: scale(.6);
+	transition: opacity .15s ease, transform .15s ease;
+}
+.bc-options--pills .bc-option__check { position: static; margin-left: auto; }
+.bc-option input:checked + label .bc-option__check { opacity: 1; transform: scale(1); }
+
+/* ---- Review step -------------------------------------------------------- */
+
+.bc-review {
+	background: var(--bc-bg-soft, #FBF7F4);
+	border-radius: 16px;
+	padding: 4px 22px;
+	margin-bottom: 20px;
+}
+.bc-review__row {
+	display: grid;
+	gap: 2px;
+	padding: 14px 0;
+	border-bottom: 1px solid var(--bcf-line);
+}
+.bc-review__row:last-child { border-bottom: 0; }
+.bc-review__label {
+	font-size: .75rem;
+	font-weight: 800;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	color: var(--bcf-muted);
+}
+.bc-review__value { color: var(--bcf-ink); font-weight: 600; word-break: break-word; }
+.bc-review__value--empty { color: var(--bcf-muted); font-weight: 400; font-style: italic; }
+
+.bc-review__edit {
+	justify-self: start;
+	margin-top: 4px;
+	background: none;
+	border: 0;
+	padding: 0;
+	font: inherit;
+	font-size: .82rem;
+	font-weight: 700;
+	color: var(--bcf-red);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+@media (min-width: 620px) {
+	.bc-review__row { grid-template-columns: 200px 1fr auto; align-items: baseline; gap: 16px; }
+	.bc-review__edit { margin-top: 0; }
+}
+
+/* Shown only when JS never ran; the script removes it once it renders a summary. */
+.bc-review__fallback { margin: 14px 0; color: var(--bcf-muted); font-size: .92rem; }
+
+.bc-consent {
+	font-size: .85rem;
+	color: var(--bcf-muted);
+	padding: 14px 16px;
+	background: var(--bc-bg-tint, #FDF2F4);
+	border-radius: 12px;
+}
+.bc-consent p { margin: 0; }
+
+/* ---- Navigation --------------------------------------------------------- */
+
+.bc-form__nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+	margin-top: 28px;
+	padding-top: 24px;
+	border-top: 1px solid var(--bcf-line);
+}
+.bc-form__nav .bc-form__back { margin-right: auto; }
+.bc-form__nav button[hidden] { display: none; }
+
+.bc-form__note {
+	margin: 18px 0 0;
+	font-size: .85rem;
+	color: var(--bcf-muted);
+	line-height: 1.55;
+}
+
+/* Buttons, redeclared so the form still looks right under another theme. */
+.bc-form .bc-btn,
+.bc-form-wrap .bc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 14px 28px;
+	min-height: 48px;
+	border: 2px solid transparent;
+	border-radius: 999px;
+	font-family: var(--bc-font-heading, system-ui, sans-serif);
+	font-weight: 800;
+	font-size: 1rem;
+	line-height: 1.2;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color .15s ease, transform .15s ease;
+}
+.bc-form .bc-btn--primary { background: var(--bcf-red); color: #fff; }
+.bc-form .bc-btn--primary:hover { background: var(--bc-red-dark, #9E0C24); }
+.bc-form .bc-btn--outline { background: transparent; color: var(--bcf-red); border-color: currentColor; }
+.bc-form .bc-btn--outline:hover { background: var(--bcf-red); color: #fff; border-color: var(--bcf-red); }
+.bc-form .bc-btn--block { width: 100%; }
+.bc-form .bc-btn[disabled] { opacity: .6; cursor: progress; }
+
+/* ---- Alerts ------------------------------------------------------------- */
+
+.bc-alert {
+	border-radius: 16px;
+	padding: 20px 24px;
+	margin-bottom: 22px;
+	border-left: 5px solid;
+}
+.bc-alert p:last-child { margin-bottom: 0; }
+.bc-alert ul { margin: 10px 0 0; padding-left: 20px; }
+.bc-alert li { margin-bottom: 5px; }
+
+.bc-alert--error { background: #FEF2F2; border-color: #DC2626; color: #7F1D1D; }
+.bc-alert--error a { color: #991B1B; }
+
+.bc-alert--success {
+	background: #F0FDF4;
+	border-color: #16A34A;
+	color: #14532D;
+	padding: 28px;
+}
+.bc-alert--success h3 { margin: 0 0 10px; color: #14532D; }
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.bc-option label,
+	.bc-option__check,
+	.bc-progress__dot,
+	.bc-input { transition: none; }
+}

@@ -1,0 +1,76 @@
+# =============================================================================
+# Briteclean Services LLC
+#
+# This repository tracks only the code we wrote: the theme, the plugin and the
+# docs. WordPress core, the database and uploads are NOT part of it — they live
+# in the LocalWP site and are recreated by migration, not by git.
+#
+# wp-content is handled as an allowlist rather than a blocklist: everything is
+# ignored unless explicitly un-ignored below. That way installing a plugin or
+# dropping a migration export into the tree can never quietly end up in a commit.
+# =============================================================================
+
+# --- wp-content: ignore everything, then allow only ours ---------------------
+wp-content/*
+!wp-content/themes/
+wp-content/themes/*
+!wp-content/themes/briteclean/
+
+!wp-content/plugins/
+wp-content/plugins/*
+!wp-content/plugins/briteclean-bookings/
+
+# --- WordPress core, in case a full install is ever copied in ----------------
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/index.php
+/license.txt
+/readme.html
+/xmlrpc.php
+wp-config.php
+wp-config-local.php
+
+# --- Secrets and environment -------------------------------------------------
+.env
+.env.*
+*.pem
+*.key
+
+# --- Customer data: never commit this ----------------------------------------
+# The CSV export contains customers' names, phone numbers, email addresses and
+# home addresses. It must not go anywhere near version control.
+briteclean-bookings-*.csv
+*.sql
+*.sql.gz
+*.wpress
+
+# --- Logs and debug ----------------------------------------------------------
+*.log
+debug.log
+error_log
+
+# --- Build tooling, if a Sass step is added later ----------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.sass-cache/
+*.css.map
+
+# --- Editors and OS ----------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+.claude/
+
+# --- Notes ---
+# assets/img/placeholders/*.jpg IS tracked — those are deliverables.
+# wp-content/themes/briteclean/acf-json/ IS tracked — that is the point of ACF
+# JSON sync: field changes made in wp-admin get written to disk and committed.

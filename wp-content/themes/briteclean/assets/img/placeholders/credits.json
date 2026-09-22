@@ -1,0 +1,67 @@
+{
+  "_comment": "Placeholder photography for Briteclean Services LLC. All images sourced from Pexels under the Pexels License: free for commercial use, no attribution required, modification permitted. Replace with the client's own photographs before or after launch. Read by inc/seeder.php to set alt text on import.",
+  "_license": "https://www.pexels.com/license/",
+  "_source": "https://www.pexels.com",
+  "images": {
+    "hero-kitchen-counter.jpg": {
+      "pexels_id": "4008518",
+      "url": "https://www.pexels.com/photo/4008518/",
+      "alt": "A cleaner wearing pink rubber gloves wiping a white kitchen shelf with a cloth and spray bottle",
+      "target": "hero"
+    },
+    "about-team.jpg": {
+      "pexels_id": "6195125",
+      "url": "https://www.pexels.com/photo/6195125/",
+      "alt": "Three cleaners in red uniforms standing with a vacuum, mop and equipment in a bright modern living room",
+      "target": "page:about"
+    },
+    "service-residential-cleaning.jpg": {
+      "pexels_id": "6197116",
+      "url": "https://www.pexels.com/photo/6197116/",
+      "alt": "A cleaner in a red uniform mopping the floor of a modern open-plan home while a colleague cleans the window",
+      "target": "product:residential-cleaning"
+    },
+    "service-office-cleaning.jpg": {
+      "pexels_id": "10567271",
+      "url": "https://www.pexels.com/photo/10567271/",
+      "alt": "A person wiping a wooden office desk with a cloth and a bottle of multi-purpose cleaner",
+      "target": "product:office-cleaning"
+    },
+    "service-deep-cleaning.jpg": {
+      "pexels_id": "9462746",
+      "url": "https://www.pexels.com/photo/9462746/",
+      "alt": "A professional cleaner in rubber gloves detail-cleaning a kitchen stove with spray and a cloth",
+      "target": "product:deep-cleaning"
+    },
+    "service-commercial-cleaning.jpg": {
+      "pexels_id": "34516670",
+      "url": "https://www.pexels.com/photo/34516670/",
+      "alt": "A cleaner working from a janitorial cart in a bright, spacious commercial hallway",
+      "target": "product:commercial-cleaning"
+    },
+    "service-window-cleaning.jpg": {
+      "pexels_id": "4440537",
+      "url": "https://www.pexels.com/photo/4440537/",
+      "alt": "A cleaner in red gloves spraying and wiping an interior window pane",
+      "target": "product:window-cleaning"
+    },
+    "service-move-in-cleaning.jpg": {
+      "pexels_id": "7031621",
+      "url": "https://www.pexels.com/photo/7031621/",
+      "alt": "A bright, empty apartment room with a polished wooden floor, cleaned and ready to move into",
+      "target": "product:move-in-cleaning"
+    },
+    "service-general-cleaning.jpg": {
+      "pexels_id": "6195118",
+      "url": "https://www.pexels.com/photo/6195118/",
+      "alt": "A cleaner in a red uniform working with a bucket of supplies in a bright modern room",
+      "target": "product:general-cleaning"
+    },
+    "service-emergency-cleaning.jpg": {
+      "pexels_id": "6196685",
+      "url": "https://www.pexels.com/photo/6196685/",
+      "alt": "A cleaning crew in red uniforms carrying equipment up to a house, arriving for a call-out",
+      "target": "product:emergency-cleaning"
+    }
+  }
+}

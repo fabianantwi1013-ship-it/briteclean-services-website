@@ -1,0 +1,22 @@
+/*
+Theme Name: Briteclean
+Theme URI: https://britecleanservices.com
+Author: Built for Briteclean Services LLC
+Description: A lightweight, hand-coded theme for Briteclean Services LLC — a cleaning company in West Chester, Ohio. Mobile-first, no page builder, with a request-based booking flow powered by the companion Briteclean Bookings plugin. Brand palette: bold red, warm gold, deep green accent.
+Version: 1.0.0
+Requires at least: 6.4
+Tested up to: 6.7
+Requires PHP: 8.0
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: briteclean
+Tags: business, cleaning, local-business, custom-menu, custom-logo, featured-images, translation-ready
+*/
+
+/*
+ * The real stylesheet is assets/css/main.css, enqueued in functions.php.
+ *
+ * This file exists because WordPress requires a style.css with a theme header to
+ * recognise the theme at all. It is intentionally not enqueued, so nothing here
+ * affects the front end — put styles in assets/css/main.css instead.
+ */
