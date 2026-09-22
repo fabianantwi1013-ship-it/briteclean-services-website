@@ -50,6 +50,9 @@ briteclean-bookings-*.csv
 debug.log
 error_log
 
+# --- Build output from bin/package.sh -----------------------------------------
+dist/
+
 # --- Build tooling, if a Sass step is added later ----------------------------
 node_modules/
 npm-debug.log*
