@@ -470,6 +470,13 @@ p:last-child { margin-bottom: 0; }
 }
 .bc-hero > * { position: relative; }
 
+/* The base heading rule sets --bc-ink, which is near-black on the red panel — 2.96:1,
+   failing even the relaxed large-text threshold. The hero is not .bc-panel--red, so it
+   needs the override explicitly. White on this red is 5.88:1. */
+.bc-hero h1,
+.bc-hero h2,
+.bc-hero h3 { color: #fff; }
+
 .bc-hero__grid { display: grid; gap: 34px; align-items: center; }
 
 .bc-hero__badge { margin-bottom: 18px; }

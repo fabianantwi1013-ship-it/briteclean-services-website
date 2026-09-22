@@ -49,21 +49,25 @@ function briteclean_register_testimonials() {
 add_action( 'init', 'briteclean_register_testimonials' );
 
 /**
- * Tell the client what goes in the title and body fields.
+ * Tell the client what goes in the title field.
  *
- * @param array $texts Existing placeholder text.
- * @return array
+ * Uses the `enter_title_here` filter rather than the post type's labels filter: the
+ * labels filter passes a stdClass and runs during register_post_type(), long before
+ * there is a screen to inspect. This one passes the post itself, which is both the
+ * right time and the right thing to key off.
+ *
+ * @param string  $text Current placeholder.
+ * @param WP_Post $post Post being edited.
+ * @return string
  */
-function briteclean_testimonial_title_placeholder( $texts ) {
-	$screen = get_current_screen();
-
-	if ( $screen && 'bc_testimonial' === $screen->post_type ) {
-		$texts['enter_title_here'] = __( "Customer's name", 'briteclean' );
+function briteclean_testimonial_title_placeholder( $text, $post ) {
+	if ( $post instanceof WP_Post && 'bc_testimonial' === $post->post_type ) {
+		return __( "Customer's name", 'briteclean' );
 	}
 
-	return $texts;
+	return $text;
 }
-add_filter( 'post_type_labels_bc_testimonial', 'briteclean_testimonial_title_placeholder' );
+add_filter( 'enter_title_here', 'briteclean_testimonial_title_placeholder', 10, 2 );
 
 /**
  * Add a rating column to the testimonials list table.

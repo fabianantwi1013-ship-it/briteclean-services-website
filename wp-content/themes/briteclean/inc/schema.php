@@ -148,7 +148,9 @@ function briteclean_schema_opening_hours( $hours ) {
 
 	foreach ( $hours as $days_label => $time_label ) {
 		// Match "8:00 AM – 6:00 PM" with any dash style between the two times.
-		if ( ! preg_match( '/(\d{1,2}:\d{2}\s*(?:AM|PM))\s*[–—-]\s*(\d{1,2}:\d{2}\s*(?:AM|PM))/i', $time_label, $times ) ) {
+		// The /u modifier is required: en- and em-dashes are multi-byte in UTF-8, and
+		// without it the character class matches single bytes and never fires.
+		if ( ! preg_match( '/(\d{1,2}:\d{2}\s*(?:AM|PM))\s*[–—-]\s*(\d{1,2}:\d{2}\s*(?:AM|PM))/iu', $time_label, $times ) ) {
 			continue;
 		}
 
@@ -159,7 +161,7 @@ function briteclean_schema_opening_hours( $hours ) {
 		$label_lower  = strtolower( $days_label );
 
 		// "Monday – Friday" expands to the full run; anything else lists the days named.
-		if ( preg_match( '/(\w+day)\s*[–—-]\s*(\w+day)/i', $label_lower, $range ) ) {
+		if ( preg_match( '/(\w+day)\s*[–—-]\s*(\w+day)/iu', $label_lower, $range ) ) {
 			$order = array_keys( $day_map );
 			$start = array_search( strtolower( $range[1] ), $order, true );
 			$end   = array_search( strtolower( $range[2] ), $order, true );
