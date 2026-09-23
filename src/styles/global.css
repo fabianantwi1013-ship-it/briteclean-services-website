@@ -1233,7 +1233,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 
 .bc-option input:checked + label {
 	border-color: var(--bcf-primary);
-	background: var(--bc-bg-tint, #FDF2F4);
+	background: var(--bc-bg-tint, #EDF6F0);
 }
 
 /* The focus ring must sit on the label, since the real input is visually hidden. */
@@ -1266,7 +1266,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 /* ---- Review step -------------------------------------------------------- */
 
 .bc-review {
-	background: var(--bc-bg-soft, #FBF7F4);
+	background: var(--bc-bg-soft, #F5FAF6);
 	border-radius: 16px;
 	padding: 4px 22px;
 	margin-bottom: 20px;
@@ -1314,7 +1314,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 	font-size: .85rem;
 	color: var(--bcf-muted);
 	padding: 14px 16px;
-	background: var(--bc-bg-tint, #FDF2F4);
+	background: var(--bc-bg-tint, #EDF6F0);
 	border-radius: 12px;
 }
 .bc-consent p { margin: 0; }
@@ -1360,7 +1360,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 	transition: background-color .15s ease, transform .15s ease;
 }
 .bc-form .bc-btn--primary { background: var(--bcf-primary); color: #fff; }
-.bc-form .bc-btn--primary:hover { background: var(--bc-primary-dark, #9E0C24); }
+.bc-form .bc-btn--primary:hover { background: var(--bc-primary-dark, #026232); }
 .bc-form .bc-btn--outline { background: transparent; color: var(--bcf-primary); border-color: currentColor; }
 .bc-form .bc-btn--outline:hover { background: var(--bcf-primary); color: #fff; border-color: var(--bcf-primary); }
 .bc-form .bc-btn--block { width: 100%; }
