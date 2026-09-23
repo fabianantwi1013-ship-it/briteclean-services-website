@@ -942,12 +942,12 @@ p:last-child { margin-bottom: 0; }
 /*
  * Briteclean booking form.
  *
- * Inherits the brand tokens from the theme's main.css. The fallbacks in var() keep the
- * form usable if the plugin is ever run under a different theme.
+ * Inherits the brand tokens from the root scope. The var() fallbacks keep the form
+ * styled even if this block is ever lifted into another project.
  */
 
 .bc-form-wrap {
-	--bcf-red: var(--bc-primary, #C8102E);
+	--bcf-primary: var(--bc-primary, #014424);
 	--bcf-accent: var(--bc-accent, #D40510);
 	--bcf-ink: var(--bc-ink, #1A1A1A);
 	--bcf-muted: var(--bc-muted, #6B7280);
@@ -1008,7 +1008,7 @@ p:last-child { margin-bottom: 0; }
 	height: 2px;
 	background: var(--bcf-line);
 }
-.bc-progress__item.is-done:not(:last-child)::after { background: var(--bcf-red); }
+.bc-progress__item.is-done:not(:last-child)::after { background: var(--bcf-primary); }
 
 .bc-progress__dot {
 	display: grid;
@@ -1026,13 +1026,13 @@ p:last-child { margin-bottom: 0; }
 	transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
 .bc-progress__item.is-active .bc-progress__dot {
-	background: var(--bcf-red);
-	border-color: var(--bcf-red);
+	background: var(--bcf-primary);
+	border-color: var(--bcf-primary);
 	color: #fff;
 }
 .bc-progress__item.is-done .bc-progress__dot {
-	background: var(--bcf-red);
-	border-color: var(--bcf-red);
+	background: var(--bcf-primary);
+	border-color: var(--bcf-primary);
 	color: #fff;
 }
 
@@ -1056,7 +1056,7 @@ p:last-child { margin-bottom: 0; }
 	font-weight: 700;
 	letter-spacing: .08em;
 	text-transform: uppercase;
-	color: var(--bcf-red);
+	color: var(--bcf-primary);
 }
 .bc-form.is-enhanced .bc-step-counter { display: block; }
 
@@ -1088,7 +1088,7 @@ p:last-child { margin-bottom: 0; }
 	height: 38px;
 	flex: 0 0 38px;
 	border-radius: 50%;
-	background: var(--bcf-red);
+	background: var(--bcf-primary);
 	color: #fff;
 	font-weight: 800;
 	font-size: .95rem;
@@ -1123,7 +1123,7 @@ p:last-child { margin-bottom: 0; }
 	font-size: .95rem;
 	color: var(--bcf-ink);
 }
-.bc-req { color: var(--bcf-red); margin-left: 2px; }
+.bc-req { color: var(--bcf-primary); margin-left: 2px; }
 
 .bc-help {
 	margin: -2px 0 9px;
@@ -1150,7 +1150,7 @@ p:last-child { margin-bottom: 0; }
 .bc-input:hover { border-color: #d4d4d8; }
 .bc-input:focus {
 	outline: none;
-	border-color: var(--bcf-red);
+	border-color: var(--bcf-primary);
 	box-shadow: 0 0 0 4px rgba(1, 68, 36, .12);
 }
 .bc-input:focus-visible { outline: 2px solid transparent; }
@@ -1232,7 +1232,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 .bc-option label:hover { border-color: rgba(1, 68, 36, .4); background: #FFFBFB; }
 
 .bc-option input:checked + label {
-	border-color: var(--bcf-red);
+	border-color: var(--bcf-primary);
 	background: var(--bc-bg-tint, #FDF2F4);
 }
 
@@ -1242,8 +1242,8 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 	outline-offset: 2px;
 }
 
-.bc-option__icon { color: var(--bcf-red); line-height: 0; }
-.bc-option input:checked + label .bc-option__icon { color: var(--bcf-red); }
+.bc-option__icon { color: var(--bcf-primary); line-height: 0; }
+.bc-option input:checked + label .bc-option__icon { color: var(--bcf-primary); }
 
 .bc-option__check {
 	position: absolute;
@@ -1254,7 +1254,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	background: var(--bcf-red);
+	background: var(--bcf-primary);
 	color: #fff;
 	opacity: 0;
 	transform: scale(.6);
@@ -1297,7 +1297,7 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 	font: inherit;
 	font-size: .82rem;
 	font-weight: 700;
-	color: var(--bcf-red);
+	color: var(--bcf-primary);
 	text-decoration: underline;
 	cursor: pointer;
 }
@@ -1359,10 +1359,10 @@ textarea.bc-input { resize: vertical; min-height: 110px; line-height: 1.6; }
 	text-decoration: none;
 	transition: background-color .15s ease, transform .15s ease;
 }
-.bc-form .bc-btn--primary { background: var(--bcf-red); color: #fff; }
+.bc-form .bc-btn--primary { background: var(--bcf-primary); color: #fff; }
 .bc-form .bc-btn--primary:hover { background: var(--bc-primary-dark, #9E0C24); }
-.bc-form .bc-btn--outline { background: transparent; color: var(--bcf-red); border-color: currentColor; }
-.bc-form .bc-btn--outline:hover { background: var(--bcf-red); color: #fff; border-color: var(--bcf-red); }
+.bc-form .bc-btn--outline { background: transparent; color: var(--bcf-primary); border-color: currentColor; }
+.bc-form .bc-btn--outline:hover { background: var(--bcf-primary); color: #fff; border-color: var(--bcf-primary); }
 .bc-form .bc-btn--block { width: 100%; }
 .bc-form .bc-btn[disabled] { opacity: .6; cursor: progress; }
 
