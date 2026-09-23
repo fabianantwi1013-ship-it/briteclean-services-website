@@ -15,5 +15,8 @@
   },
   "dependencies": {
     "astro": "^7.3.3"
+  },
+  "devDependencies": {
+    "vercel": "^59.25.4"
   }
 }

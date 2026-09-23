@@ -56,3 +56,5 @@ Thumbs.db
 *.swp
 *~
 .claude/
+.vercel
+.env*
