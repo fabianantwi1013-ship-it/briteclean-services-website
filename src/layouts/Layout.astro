@@ -1,8 +1,12 @@
 ---
 import '../styles/global.css';
+import serifFont from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
+import serifItalicFont from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
+import sansFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Intro from '../components/Intro.astro';
 import Schema from '../components/Schema.astro';
 import { business } from '../data/site.js';
 
@@ -13,23 +17,75 @@ interface Props {
   image?: string;
   /** Set on the homepage, where the title should not be suffixed. */
   bare?: boolean;
+  /** Play the cinematic intro (homepage only, once per browser session). */
+  intro?: boolean;
 }
 
-const { title, description, image = '/img/photos/hero-kitchen-counter.jpg', bare = false } = Astro.props;
+const { title, description, image = '/img/og.jpg', bare = false, intro = false } = Astro.props;
 
 const fullTitle = bare ? title : `${title} – ${business.name}`;
+
+// Latin subsets only — everything on the site is English. Declared here rather than in
+// CSS so the preloads below reference exactly the same files.
+const fontFaces = [
+  `@font-face{font-family:'Instrument Serif';font-style:normal;font-weight:400;font-display:swap;src:url(${serifFont}) format('woff2')}`,
+  `@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url(${serifItalicFont}) format('woff2')}`,
+  `@font-face{font-family:'Manrope Variable';font-style:normal;font-weight:200 800;font-display:swap;src:url(${sansFont}) format('woff2-variations'),url(${sansFont}) format('woff2')}`,
+].join('');
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
 const ogImage = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-has-intro={intro ? '1' : undefined}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0A1830" />
+
+    {/*
+      Runs before first paint. Sets the flags the CSS keys motion off:
+        js       — scripts are running
+        motion   — the visitor has not asked for reduced motion
+        intro-on — show the intro curtain (homepage, first view this session)
+      If the motion bundle has not reported in within 3.5s of visible time (slow
+      network, blocked script), `motion-off` reveals everything so no content is ever
+      stuck hidden.
+    */}
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduce) d.classList.add('motion');
+        try {
+          if (d.getAttribute('data-has-intro') === '1' && !reduce && !sessionStorage.getItem('bc-intro-seen')) {
+            d.classList.add('intro-on');
+          }
+        } catch (e) {}
+        // The clock only runs while the tab is visible: a page opened in a background
+        // tab should still get its full entrance when the visitor switches to it.
+        var arm = function () {
+          setTimeout(function () {
+            if (window.__bcMotionReady) return;
+            if (document.hidden) {
+              document.addEventListener('visibilitychange', arm, { once: true });
+              return;
+            }
+            d.classList.add('motion-off');
+            d.classList.remove('intro-on');
+          }, 3500);
+        };
+        arm();
+      })();
+    </script>
+
+    <link rel="preload" href={serifFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaces}></style>
 
     <link rel="icon" type="image/png" href="/img/brand/site-icon.png" />
     <link rel="apple-touch-icon" href="/img/brand/site-icon.png" />
@@ -40,6 +96,8 @@ const ogImage = new URL(image, Astro.site).href;
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={business.name} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="generator" content={Astro.generator} />
@@ -47,55 +105,27 @@ const ogImage = new URL(image, Astro.site).href;
   </head>
 
   <body>
-    <a class="bc-skip-link" href="#bc-main">Skip to content</a>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    {intro && <Intro />}
 
     <Header />
 
-    <main id="bc-main">
+    <main id="main" tabindex="-1">
       <slot />
     </main>
 
     <Footer />
     <WhatsAppFloat />
 
+    <div class="cursor" aria-hidden="true"><span class="cursor__dot"><span class="cursor__label"></span></span></div>
+
     <script>
-      /**
-       * Mobile navigation toggle.
-       *
-       * The menu is a real <nav> that is visible by default and hidden by CSS at small
-       * widths, so it still works if this script fails to load.
-       */
-      const toggle = document.querySelector('.bc-nav-toggle');
-      const nav = document.getElementById('bc-primary-nav');
-
-      if (toggle && nav) {
-        const setOpen = (open) => {
-          nav.classList.toggle('is-open', open);
-          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        };
-
-        toggle.addEventListener('click', () => {
-          setOpen(toggle.getAttribute('aria-expanded') !== 'true');
-        });
-
-        // Escape closes the menu and returns focus to the button that opened it.
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && nav.classList.contains('is-open')) {
-            setOpen(false);
-            toggle.focus();
-          }
-        });
-
-        document.addEventListener('click', (event) => {
-          if (!nav.classList.contains('is-open')) return;
-          if (!nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
-        });
-
-        // Reset when crossing into the desktop layout, so the menu is not left in a
-        // stale "open" state that CSS no longer styles.
-        const desktop = window.matchMedia('(min-width: 980px)');
-        desktop.addEventListener('change', (e) => e.matches && setOpen(false));
-      }
+      // The motion bundle (GSAP, ScrollTrigger, SplitText, Lenis) loads as its own chunk
+      // after the first frame has painted, so it never holds up the opening image.
+      const load = () => import('../scripts/motion/index.js');
+      if (document.hidden) load();
+      else requestAnimationFrame(() => setTimeout(load, 0));
     </script>
   </body>
 </html>

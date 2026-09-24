@@ -1,61 +1,69 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
+import Img from '../components/Img.astro';
+import Process from '../components/Process.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { business } from '../data/site.js';
-import alts from '../data/photo-alt.json';
 ---
 
 <Layout
   title="About Us"
   description={`${business.name} is a cleaning company serving ${business.city}, ${business.state}. Background-checked staff, eco-friendly products and a written scope for every job.`}
 >
-  <PageHead title="About" subtitle="A local cleaning company built on showing up." />
+  <PageHead
+    title="About"
+    eyebrow="Our story"
+    subtitle="A local cleaning company built on showing up."
+    photo="scene-light"
+    position="50% 40%"
+  />
 
-  <section class="bc-section">
-    <div class="bc-container bc-contact-grid">
-      <div>
-        <img
-          src="/img/photos/about-team.jpg"
-          alt={alts['about-team.jpg']}
-          width="1600" height="1000" loading="lazy" decoding="async"
-          style="border-radius:var(--bc-radius-lg)"
-        />
+  <section class="section about">
+    <div class="container about__grid">
+      <div class="about__intro">
+        <p class="eyebrow">{business.tagline}</p>
+        <h2 class="about__title" data-split>A local cleaning company built on <em>showing up</em></h2>
       </div>
 
-      <div>
-        <span class="bc-eyebrow">Our story</span>
-        <div class="bc-content">
-          <h2>A local cleaning company built on showing up</h2>
-          <p>
-            {business.name} is a cleaning company serving {business.city}, {business.state} and the surrounding
-            communities. We started with a simple observation: most people do not want to manage a cleaning
-            service. They want to agree a time, come home to a clean space, and not think about it again.
-          </p>
-          <p>
-            So that is what we built. Background-checked staff who are trained the same way and turn up when
-            they said they would. Eco-friendly products that are safe around children and pets. A written scope
-            for every job, so nobody is guessing what "clean" means. And a real person on the other end of the
-            phone when something needs changing.
-          </p>
-          <p>
-            We are not the biggest cleaning company in the area, and we are not trying to be. We would rather
-            keep the customers we have by doing the work properly than grow past the point where we can.
-          </p>
-          <p style="padding:14px 18px;background:var(--bc-bg-tint);border-radius:var(--bc-radius-sm);font-size:.9rem;color:var(--bc-muted)">
-            <strong>Placeholder copy.</strong> Replace this with the real company story — edit
-            <code>src/pages/about.astro</code>.
-          </p>
+      <div class="about__media">
+        <div class="reveal-frame about__frame" data-reveal-img>
+          <div class="parallax" data-parallax="10">
+            <Img photo="about-team" sizes="(min-width: 900px) 50vw, 92vw" widths={[640, 960, 1280, 1800]} />
+          </div>
         </div>
+      </div>
 
-        <p class="bc-display-accent" style="color:var(--bc-primary);margin-top:1em">{business.tagline}</p>
+      <div class="about__story">
+        <p class="about__dropcap" data-reveal>
+          {business.name} is a cleaning company serving {business.city}, {business.state} and the surrounding
+          communities. We started with a simple observation: most people do not want to manage a cleaning
+          service. They want to agree a time, come home to a clean space, and not think about it again.
+        </p>
+        <p data-reveal>
+          So that is what we built. Background-checked staff who are trained the same way and turn up when
+          they said they would. Eco-friendly products that are safe around children and pets. A written scope
+          for every job, so nobody is guessing what "clean" means. And a real person on the other end of the
+          phone when something needs changing.
+        </p>
+        <p data-reveal>
+          We are not the biggest cleaning company in the area, and we are not trying to be.
+        </p>
+        <blockquote class="about__pull" data-reveal>
+          We would rather keep the customers we have by doing the work properly than grow past the point where we can.
+        </blockquote>
+        <p class="about__note" data-reveal>
+          <strong>Placeholder copy.</strong> Replace this with the real company story — edit
+          <code>src/pages/about.astro</code>.
+        </p>
       </div>
     </div>
   </section>
 
   <WhyChooseUs />
+  <Process />
   <Testimonials />
-  <CtaBand />
+  <CtaBand photo="scene-living" />
 </Layout>

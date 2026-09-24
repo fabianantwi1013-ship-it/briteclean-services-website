@@ -32,9 +32,9 @@ const today = new Date().toISOString().slice(0, 10);
     <h3>Thank you — your request is in.</h3>
     <p>We have received your booking request and sent a confirmation to your email address. A member of the team will be in touch shortly to confirm the details and timing.</p>
     <p>Need it sooner? Call or message us and we will get straight onto it.</p>
-    <div class="bc-btn-row" style="margin-top:18px">
-      <a class="bc-btn bc-btn--primary" href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
-      <a class="bc-btn bc-btn--whatsapp" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
+    <div class="btn-row" style="margin-top:24px">
+      <a class="btn btn--ink" href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
+      <a class="btn btn--mint" href={whatsappUrl()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={18} /> Message on WhatsApp</a>
     </div>
   </div>
 
@@ -56,7 +56,7 @@ const today = new Date().toISOString().slice(0, 10);
     <ol class="bc-progress" aria-hidden="true">
       {steps.map((step, i) => (
         <li class={`bc-progress__item ${i === 0 ? 'is-active' : ''}`} data-step={i + 1}>
-          <span class="bc-progress__dot">{i + 1}</span>
+          <span class="bc-progress__dot">{String(i + 1).padStart(2, '0')}</span>
           <span class="bc-progress__label">{step.title}</span>
         </li>
       ))}
@@ -317,9 +317,9 @@ const today = new Date().toISOString().slice(0, 10);
     </fieldset>
 
     <div class="bc-form__nav">
-      <button type="button" class="bc-btn bc-btn--outline bc-form__back" hidden>Back</button>
-      <button type="button" class="bc-btn bc-btn--primary bc-form__next" hidden>Continue</button>
-      <button type="submit" class="bc-btn bc-btn--primary bc-btn--lg bc-form__submit">Send My Booking Request</button>
+      <button type="button" class="btn btn--ghost bc-form__back" hidden>Back</button>
+      <button type="button" class="btn btn--ink bc-form__next" hidden>Continue</button>
+      <button type="submit" class="btn btn--lg bc-form__submit">Send My Booking Request</button>
     </div>
 
     <p class="bc-form__note">

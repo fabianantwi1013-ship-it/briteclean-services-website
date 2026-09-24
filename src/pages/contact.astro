@@ -8,81 +8,49 @@ import { business, phoneDigits, whatsappUrl, addressLine } from '../data/site.js
 const mapQuery = `${business.street}, ${business.city}, ${business.stateShort} ${business.postal}`;
 // Google's keyless embed — no API key, no billing account, no third-party script.
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapQuery)}`;
+const tel = (p) => `tel:+${phoneDigits(p)}`;
 ---
 
 <Layout
   title="Contact Us"
   description={`Call or WhatsApp ${business.phonePrimary}. ${business.name} is based at ${addressLine()}.`}
 >
-  <PageHead title="Contact" subtitle="Call, message, or send us a note — whichever suits you." />
+  <PageHead title="Contact" eyebrow="Talk to us" subtitle="Call, message, or send us a note — whichever suits you." photo="scene-bath" compact />
 
-  <section class="bc-section">
-    <div class="bc-container bc-contact-grid">
-      <div>
-        <h2>Talk to us</h2>
-        <ul class="bc-contact-list">
-          <li>
-            <span class="bc-medallion bc-medallion--sm" aria-hidden="true"><Icon name="phone" size={18} /></span>
-            <div>
-              <span class="bc-contact-list__label">Call or WhatsApp</span>
-              <a href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a><br />
-              <a href={`tel:+${phoneDigits(business.phoneSecondary)}`}>{business.phoneSecondary}</a>
-            </div>
-          </li>
-          <li>
-            <span class="bc-medallion bc-medallion--sm" aria-hidden="true"><Icon name="mail" size={18} /></span>
-            <div>
-              <span class="bc-contact-list__label">Email</span>
-              <a href={`mailto:${business.email}`}>{business.email}</a>
-            </div>
-          </li>
-          <li>
-            <span class="bc-medallion bc-medallion--sm" aria-hidden="true"><Icon name="pin" size={18} /></span>
-            <div>
-              <span class="bc-contact-list__label">Address</span>
-              <address style="font-style:normal">
-                {business.street}<br />{business.city}, {business.state} {business.postal}
-              </address>
-            </div>
-          </li>
-          <li>
-            <span class="bc-medallion bc-medallion--sm" aria-hidden="true"><Icon name="clock" size={18} /></span>
-            <div>
-              <span class="bc-contact-list__label">Hours</span>
-              <dl class="bc-footer__hours" style="color:var(--bc-body)">
-                {business.hours.map((h) => (
-                  <div><dt>{h.days}</dt><dd style="color:var(--bc-muted)">{h.time}</dd></div>
-                ))}
-              </dl>
-            </div>
-          </li>
-        </ul>
+  <section class="section contact">
+    <div class="container">
+      <ul class="channels">
+        <li class="channel channel--primary" data-reveal>
+          <span class="channel__icon" aria-hidden="true"><Icon name="phone" size={22} /></span>
+          <p class="index">Call or WhatsApp</p>
+          <a class="channel__value" href={tel(business.phonePrimary)}>{business.phonePrimary}</a>
+          <a class="channel__value channel__value--sub" href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a>
+        </li>
+        <li class="channel" data-reveal>
+          <span class="channel__icon" aria-hidden="true"><Icon name="whatsapp" size={22} /></span>
+          <p class="index">WhatsApp</p>
+          <a class="channel__value" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
+          <p class="channel__note">The fastest way to reach us.</p>
+        </li>
+        <li class="channel" data-reveal>
+          <span class="channel__icon" aria-hidden="true"><Icon name="mail" size={22} /></span>
+          <p class="index">Email</p>
+          <a class="channel__value channel__value--email" href={`mailto:${business.email}`}>{business.email}</a>
+        </li>
+        <li class="channel" data-reveal>
+          <span class="channel__icon" aria-hidden="true"><Icon name="pin" size={22} /></span>
+          <p class="index">Address</p>
+          <address class="channel__value channel__value--text">{business.street}<br />{business.city}, {business.state} {business.postal}</address>
+          <a class="link-line channel__link" href={directions} target="_blank" rel="noopener noreferrer">Get directions <Icon name="arrowUpRight" size={14} /></a>
+        </li>
+      </ul>
 
-        <div class="bc-btn-row" style="margin-top:28px">
-          <a class="bc-btn bc-btn--whatsapp" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
-            <Icon name="whatsapp" size={18} />
-            Message on WhatsApp
-          </a>
-          <a class="bc-btn bc-btn--primary" href="/book-now">Book a cleaning</a>
-        </div>
-      </div>
-
-      <div>
-        <div class="bc-map">
-          <iframe
-            src={mapSrc}
-            title={`Map showing ${mapQuery}`}
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen
-          ></iframe>
-        </div>
-
-        <div style="margin-top:32px">
-          <h2>Send a message</h2>
-          <p style="color:var(--bc-muted)">
-            For a full booking, use the Book Now form — it captures everything we need in one go.
-          </p>
+      <div class="contact__grid">
+        <div class="contact__form-col">
+          <p class="eyebrow">Send a message</p>
+          <h2 data-split>Drop us a <em>line</em></h2>
+          <p class="muted">For a full booking, use the Book Now form — it captures everything we need in one go.</p>
 
           <div class="bc-alert bc-alert--success" role="status" id="bc-contact-success" hidden>
             <strong>Message sent.</strong>
@@ -97,20 +65,22 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
               <input type="text" id="bc-contact-website" name="website" value="" tabindex="-1" autocomplete="off" />
             </div>
 
-            <div class="bc-field">
-              <label class="bc-label" for="bc-contact-name">
-                Your name <span class="bc-req" aria-hidden="true">*</span>
-                <span class="screen-reader-text">(required)</span>
-              </label>
-              <input class="bc-input" type="text" id="bc-contact-name" name="name" autocomplete="name" maxlength="120" required />
-            </div>
+            <div class="bc-form__row">
+              <div class="bc-field">
+                <label class="bc-label" for="bc-contact-name">
+                  Your name <span class="bc-req" aria-hidden="true">*</span>
+                  <span class="sr-only">(required)</span>
+                </label>
+                <input class="bc-input" type="text" id="bc-contact-name" name="name" autocomplete="name" maxlength="120" required />
+              </div>
 
-            <div class="bc-field">
-              <label class="bc-label" for="bc-contact-email">
-                Email address <span class="bc-req" aria-hidden="true">*</span>
-                <span class="screen-reader-text">(required)</span>
-              </label>
-              <input class="bc-input" type="email" id="bc-contact-email" name="email" autocomplete="email" maxlength="190" required />
+              <div class="bc-field">
+                <label class="bc-label" for="bc-contact-email">
+                  Email address <span class="bc-req" aria-hidden="true">*</span>
+                  <span class="sr-only">(required)</span>
+                </label>
+                <input class="bc-input" type="email" id="bc-contact-email" name="email" autocomplete="email" maxlength="190" required />
+              </div>
             </div>
 
             <div class="bc-field">
@@ -121,13 +91,34 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&ou
             <div class="bc-field">
               <label class="bc-label" for="bc-contact-message">
                 Message <span class="bc-req" aria-hidden="true">*</span>
-                <span class="screen-reader-text">(required)</span>
+                <span class="sr-only">(required)</span>
               </label>
               <textarea class="bc-input" id="bc-contact-message" name="message" rows="5" maxlength="2000" required></textarea>
             </div>
 
-            <button type="submit" class="bc-btn bc-btn--primary bc-btn--block">Send Message</button>
+            <button type="submit" class="btn btn--ink btn--lg btn--block">Send Message</button>
           </form>
+        </div>
+
+        <div class="contact__side">
+          <div class="map-frame reveal-frame" data-reveal-img>
+            <iframe
+              src={mapSrc}
+              title={`Map showing ${mapQuery}`}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+
+          <div class="hours-card">
+            <p class="index">Opening hours</p>
+            <dl>
+              {business.hours.map((h) => (
+                <div><dt>{h.days}</dt><dd>{h.time}</dd></div>
+              ))}
+            </dl>
+          </div>
         </div>
       </div>
     </div>

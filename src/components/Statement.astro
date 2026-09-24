@@ -1,0 +1,40 @@
+---
+/**
+ * The brand statement: a large paragraph that brightens word by word as it scrolls
+ * through the viewport, beside a sunlit photograph and the four booking facts.
+ */
+import Img from './Img.astro';
+import { business, hero, facts } from '../data/site.js';
+---
+
+<section class="statement section" id="story">
+  <div class="container statement__grid">
+    <div class="statement__media">
+      <div class="reveal-frame" data-reveal-img>
+        <div class="parallax" data-parallax="12">
+          <Img photo="scene-light" sizes="(min-width: 900px) 34vw, 90vw" widths={[480, 800, 1200]} />
+        </div>
+      </div>
+      <p class="statement__caption index">Clean Spaces — Healthy Lives</p>
+    </div>
+
+    <div class="statement__copy">
+      <p class="eyebrow">{business.tagline}</p>
+      <p class="statement__text" data-scrub-words>
+        {hero.subheadline} Booked around your schedule, cleaned to a standard you can see, and
+        confirmed by a real person — never an automated calendar.
+      </p>
+
+      <dl class="facts">
+        {facts.map((f) => (
+          <div class="fact" data-reveal>
+            <dt class="fact__label">{f.label}</dt>
+            <dd class="fact__value">
+              {f.prefix && <span>{f.prefix}</span>}<span data-count={f.value}>{f.value}</span>{f.suffix}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

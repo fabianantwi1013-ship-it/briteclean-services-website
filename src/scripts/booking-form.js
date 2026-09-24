@@ -52,6 +52,25 @@ export function initBookingForm() {
   const prefersReducedMotion = () =>
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Scroll through the smooth-scroll controller when it is running, so the two do not
+  // fight over the scroll position; fall back to native scrolling otherwise.
+  // Focus is always moved with preventScroll first, so the position measured here is
+  // the real one and not a native focus jump the smooth scroller has not seen yet.
+  function scrollToElement(el, offset) {
+    const top = Math.max(0, el.getBoundingClientRect().top + window.pageYOffset + offset);
+    const lenis = window.__bcLenis;
+    if (lenis) {
+      lenis.scrollTo(top, { immediate: prefersReducedMotion() });
+      return;
+    }
+    window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  }
+
+  function scrollToCentre(el) {
+    const offset = -Math.max(90, (window.innerHeight - el.offsetHeight) / 2);
+    scrollToElement(el, offset);
+  }
+
   function showStep(index, moveFocus) {
     current = Math.max(0, Math.min(steps.length - 1, index));
 
@@ -74,18 +93,17 @@ export function initBookingForm() {
 
     if (isLast) buildReview();
 
+    form.style.setProperty('--bc-progress', String(current / (steps.length - 1)));
+
     if (moveFocus) {
       // Focus the heading rather than the first input, so a screen reader announces
       // what the step is before what to type.
       const legend = steps[current].querySelector('.bc-step__title');
       if (legend) {
         legend.setAttribute('tabindex', '-1');
-        legend.focus();
+        legend.focus({ preventScroll: true });
       }
-      window.scrollTo({
-        top: form.getBoundingClientRect().top + window.pageYOffset - 90,
-        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      });
+      scrollToElement(form, -110);
     }
   }
 
@@ -258,8 +276,8 @@ export function initBookingForm() {
     });
 
     errorBox.hidden = false;
-    errorBox.focus();
-    errorBox.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    errorBox.focus({ preventScroll: true });
+    scrollToCentre(errorBox);
   }
 
   /* ---- wiring ---- */
@@ -332,8 +350,8 @@ export function initBookingForm() {
         if (errorBox) errorBox.hidden = true;
         if (successBox) {
           successBox.hidden = false;
-          successBox.focus();
-          successBox.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+          successBox.focus({ preventScroll: true });
+          scrollToCentre(successBox);
         }
         return;
       }

@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { business, phoneDigits } from '../data/site.js';
+import { business, phoneDigits, whatsappUrl } from '../data/site.js';
 
 const nav = [
   { href: '/', label: 'Home' },
@@ -8,47 +8,100 @@ const nav = [
   { href: '/about', label: 'About' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
-  { href: '/book-now', label: 'Book Now' },
 ];
 
+const menu = [...nav, { href: '/book-now', label: 'Book Now' }];
+
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href) => path === (href.replace(/\/$/, '') || '/');
+const tel = (p) => `tel:+${phoneDigits(p)}`;
 ---
 
-<div class="bc-topbar">
-  <div class="bc-container bc-topbar__inner">
-    <a href={`tel:+${phoneDigits(business.phonePrimary)}`}>
-      <Icon name="phone" size={15} />
-      <span>{business.phonePrimary}</span>
-    </a>
-    <span class="bc-topbar__tagline">{business.tagline}</span>
-    <a href="/contact">
-      <Icon name="pin" size={15} />
-      <span>{business.city}, {business.state}</span>
-    </a>
-  </div>
-</div>
-
-<header class="bc-header">
-  <div class="bc-container bc-header__inner">
-    <a class="bc-brand bc-brand__logo" href="/" rel="home">
-      <img src="/img/brand/logo.png" alt={`${business.name} — ${business.tagline}`} width="477" height="134" />
+<header class="site-header header--over" data-header>
+  <div class="container header__inner">
+    <a class="header__brand" href="/" rel="home" aria-label={`${business.name} — home`}>
+      <img class="logo logo--white" src="/img/brand/logo-white.png" alt="" width="477" height="134" />
+      <img class="logo logo--color" src="/img/brand/logo.webp" alt="" width="420" height="118" />
     </a>
 
-    <button class="bc-nav-toggle" type="button" aria-expanded="false" aria-controls="bc-primary-nav">
-      <span class="bc-nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
-      <span>Menu</span>
-    </button>
-
-    <nav class="bc-nav" id="bc-primary-nav" aria-label="Primary navigation">
+    <nav class="header__nav" aria-label="Primary navigation">
       <ul>
         {nav.map((item) => (
-          <li class={path === item.href.replace(/\/$/, '') || (item.href === '/' && path === '/') ? 'current-menu-item' : ''}>
-            <a href={item.href} aria-current={path === item.href.replace(/\/$/, '') ? 'page' : undefined}>{item.label}</a>
+          <li>
+            <a class="roll" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <span class="roll__inner">
+                <span>{item.label}</span>
+                <span aria-hidden="true">{item.label}</span>
+              </span>
+            </a>
           </li>
         ))}
       </ul>
     </nav>
 
-    <a class="bc-btn bc-btn--primary bc-btn--sm bc-header__cta" href="/book-now">Book Now</a>
+    <div class="header__actions">
+      <a class="header__phone" href={tel(business.phonePrimary)}>
+        <span class="header__phone-dot" aria-hidden="true"></span>
+        {business.phonePrimary}
+      </a>
+      <a class="btn btn--accent btn--sm header__cta" href="/book-now" data-magnetic>Book Now</a>
+
+      {/*
+        A link, not a button, so the menu still opens without JavaScript: #site-menu
+        becomes the :target and CSS shows it. The script upgrades it to a proper
+        disclosure button with focus management.
+      */}
+      <a class="menu-toggle" href="#site-menu" role="button" aria-controls="site-menu" aria-expanded="false" data-menu-toggle>
+        <span class="menu-toggle__label">Menu</span>
+        <span class="menu-toggle__lines" aria-hidden="true"><span></span><span></span></span>
+      </a>
+    </div>
   </div>
 </header>
+
+<div class="menu on-ink grain" id="site-menu" role="dialog" aria-modal="true" aria-label="Site menu" data-menu data-lenis-prevent>
+  <div class="container menu__top">
+    <a class="header__brand" href="/" aria-label={`${business.name} — home`}>
+      <img class="logo" src="/img/brand/logo-white.png" alt="" width="477" height="134" />
+    </a>
+    <a class="menu__close" href="#" data-menu-close>
+      <span>Close</span>
+      <Icon name="plus" size={20} />
+    </a>
+  </div>
+
+  <div class="container menu__body">
+    <nav aria-label="Main menu">
+      <ol class="menu__list">
+        {menu.map((item, i) => (
+          <li class="menu__item" style={`--i:${i}`}>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <span class="index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span class="menu__label">{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <aside class="menu__aside">
+      <div class="menu__block">
+        <p class="eyebrow eyebrow--on-ink">Call or WhatsApp</p>
+        <a class="menu__big" href={tel(business.phonePrimary)}>{business.phonePrimary}</a>
+        <a class="menu__big" href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a>
+      </div>
+      <div class="menu__block">
+        <p class="eyebrow eyebrow--on-ink">Visit</p>
+        <address>{business.street}<br />{business.city}, {business.state} {business.postal}</address>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--accent" href="/book-now">Book Now <span class="btn__icon"><Icon name="arrow" size={16} /></span></a>
+        <a class="btn btn--ghost-light" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
+          <Icon name="whatsapp" size={18} /> WhatsApp
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <p class="container menu__tagline" aria-hidden="true">{business.tagline}</p>
+</div>

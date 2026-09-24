@@ -1,0 +1,50 @@
+---
+/**
+ * Responsive photo. Wraps Astro's <Picture> so every image on the site gets AVIF and
+ * WebP at sensible widths, with the JPEG as the fallback.
+ *
+ * `photo` is a key from src/data/photos.js.
+ */
+import { Picture } from 'astro:assets';
+import { photos } from '../data/photos.js';
+
+interface Props {
+  photo: string;
+  sizes?: string;
+  widths?: number[];
+  eager?: boolean;
+  position?: string;
+  class?: string;
+  /** Pass an empty string for purely decorative uses. */
+  alt?: string;
+}
+
+const {
+  photo,
+  sizes = '100vw',
+  widths = [640, 960, 1280, 1920],
+  eager = false,
+  position,
+  class: className,
+  alt,
+} = Astro.props;
+
+const entry = photos[photo];
+if (!entry) throw new Error(`Unknown photo key: ${photo}`);
+
+const usable = widths.filter((w) => w <= entry.src.width);
+---
+
+<Picture
+  src={entry.src}
+  alt={alt ?? entry.alt}
+  formats={['avif', 'webp']}
+  widths={usable.length ? usable : [entry.src.width]}
+  sizes={sizes}
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={eager ? 'high' : undefined}
+  decoding={eager ? 'sync' : 'async'}
+  class={className}
+  style={position ? `object-position:${position}` : undefined}
+  pictureAttributes={{ class: 'pic' }}
+/>

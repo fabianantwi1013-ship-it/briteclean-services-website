@@ -1,0 +1,48 @@
+---
+import Icon from './Icon.astro';
+import BookingForm from './BookingForm.astro';
+import { business, phoneDigits, whatsappUrl } from '../data/site.js';
+
+interface Props {
+  context?: string;
+  /** Heading level: the homepage uses h2, the Book Now page already has its h1. */
+  heading?: string;
+}
+const { context = 'page', heading = 'Request Your Cleaning in Five Steps' } = Astro.props;
+const tel = (p) => `tel:+${phoneDigits(p)}`;
+
+const assurances = [
+  { icon: 'shield', text: 'No payment taken online — this is a request, not an order.' },
+  { icon: 'phone', text: 'Confirmed personally, usually the same working day.' },
+  { icon: 'leaf', text: 'Eco-friendly products and all equipment included.' },
+];
+---
+
+<section class="book section" id="book">
+  <div class="container book__grid">
+    <aside class="book__aside on-ink grain">
+      <div class="book__aside-inner">
+        <p class="eyebrow eyebrow--on-ink">Book a cleaning</p>
+        <h2 class="book__title" data-split>{heading}</h2>
+        <p class="book__intro">Tell us what you need. No payment now — we confirm every booking with you personally first.</p>
+
+        <ul class="book__assure">
+          {assurances.map((a) => (
+            <li><span aria-hidden="true"><Icon name={a.icon} size={18} /></span>{a.text}</li>
+          ))}
+        </ul>
+
+        <div class="book__contact">
+          <p class="index">Prefer to talk?</p>
+          <a href={tel(business.phonePrimary)}>{business.phonePrimary}</a>
+          <a href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a>
+          <a class="link-line" href={whatsappUrl()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={16} /> WhatsApp us</a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="book__form">
+      <BookingForm context={context} />
+    </div>
+  </div>
+</section>

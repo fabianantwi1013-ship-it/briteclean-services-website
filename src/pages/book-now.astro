@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import BookingForm from '../components/BookingForm.astro';
+import BookingSection from '../components/BookingSection.astro';
 import ServiceArea from '../components/ServiceArea.astro';
 ---
 
@@ -9,13 +9,16 @@ import ServiceArea from '../components/ServiceArea.astro';
   title="Book a Cleaning"
   description="Request a cleaning in five steps. No payment taken — we confirm every booking with you personally before anything is scheduled."
 >
-  <PageHead title="Book Now" subtitle="Tell us what you need and when. We confirm every request personally." />
+  <PageHead
+    title="Book Now"
+    eyebrow="Five simple steps"
+    subtitle="Tell us what you need and when. We confirm every request personally."
+    photo="scene-living"
+    position="50% 45%"
+    compact
+  />
 
-  <section class="bc-section">
-    <div class="bc-container">
-      <BookingForm context="page" />
-    </div>
-  </section>
+  <BookingSection context="page" />
 
   <ServiceArea />
 </Layout>

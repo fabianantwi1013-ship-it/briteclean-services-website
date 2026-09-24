@@ -1,51 +1,102 @@
 ---
+/**
+ * Full-screen cinematic slideshow.
+ *
+ * Without JavaScript this is a single still (the first slide) with the headline and
+ * buttons. The script adds the wipe transitions, Ken Burns drift and controls. The
+ * autoplay can always be paused (WCAG 2.2.2), stops when the hero is off screen or
+ * the tab is hidden, and never starts under reduced motion.
+ */
 import Icon from './Icon.astro';
-import { hero, business, phoneDigits } from '../data/site.js';
-import alts from '../data/photo-alt.json';
+import Img from './Img.astro';
+import { hero, heroSlides, business, phoneDigits } from '../data/site.js';
+
+const total = String(heroSlides.length).padStart(2, '0');
+// The headline is split so the last phrase can be set in italic; the text itself is
+// unchanged: "Professional Cleaning Services for Your Space".
+const [lead, tail] = hero.headline.split(' for ');
 ---
 
-<section class="bc-hero">
-  <div class="bc-container bc-hero__grid">
-    <div class="bc-hero__copy">
-      <span class="bc-badge bc-hero__badge">
-        <Icon name="sparkle" size={16} />
-        {hero.badge}
-      </span>
+<section class="hero on-ink" data-hero aria-roledescription="carousel" aria-label="Spaces we clean">
+  <div class="hero__media" data-hero-media>
+    {heroSlides.map((slide, i) => (
+      <div
+        class={`hero__slide${i === 0 ? ' is-active' : ''}`}
+        data-slide
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${i + 1} of ${heroSlides.length}: ${slide.label}`}
+        aria-hidden={i === 0 ? undefined : 'true'}
+      >
+        <div class="hero__img" data-slide-img>
+          <Img
+            photo={slide.photo}
+            eager={i === 0}
+            sizes="100vw"
+            widths={[768, 1280, 1920, 2400]}
+            position={slide.position}
+          />
+        </div>
+      </div>
+    ))}
+    <span class="hero__edge" data-hero-edge aria-hidden="true"></span>
+  </div>
 
-      <h1>{hero.headline}</h1>
-      <p class="bc-hero__sub">{hero.subheadline}</p>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="grain hero__grain" aria-hidden="true"></div>
 
-      <div class="bc-btn-row">
-        <a class="bc-btn bc-btn--accent bc-btn--lg" href="/book-now">
+  <div class="container hero__content" data-hero-content>
+    <p class="hero__badge" data-hero-item>
+      <Icon name="sparkle" size={14} />
+      {hero.badge}
+    </p>
+
+    <h1 class="hero__title" data-hero-title>
+      {lead} <em>for {tail}</em>
+    </h1>
+
+    <div class="hero__foot">
+      <p class="hero__sub" data-hero-item>{hero.subheadline}</p>
+      <div class="btn-row" data-hero-item>
+        <a class="btn btn--accent btn--lg" href="/book-now" data-magnetic>
           {hero.ctaPrimary}
-          <Icon name="arrow" size={18} />
+          <span class="btn__icon"><Icon name="arrow" size={16} /></span>
         </a>
-        <a class="bc-btn bc-btn--ghost-light bc-btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
+        <a class="btn btn--ghost-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
           <Icon name="phone" size={18} />
           {hero.ctaSecondary}
         </a>
       </div>
-
-      <p class="bc-hero__tagline">{business.tagline}</p>
-    </div>
-
-    <div class="bc-hero__media">
-      {/* Not lazy-loaded and given high priority: this is the LCP element. */}
-      <img
-        src={hero.image}
-        alt={alts['hero-kitchen-counter.jpg']}
-        width="1600"
-        height="1000"
-        loading="eager"
-        fetchpriority="high"
-        decoding="sync"
-      />
-      <span class="bc-hero__float">
-        <span class="bc-medallion bc-medallion--sm bc-medallion--green" aria-hidden="true">
-          <Icon name="leaf" size={18} />
-        </span>
-        Eco-friendly products
-      </span>
     </div>
   </div>
+
+  <div class="container hero__bar" data-hero-item>
+    <p class="hero__caption" data-hero-caption>
+      <span class="index"><span data-hero-index>01</span> / {total}</span>
+      <span class="hero__caption-label" data-hero-label>{heroSlides[0].label}</span>
+    </p>
+
+    <div class="hero__controls" data-hero-controls>
+      <ol class="hero__dots">
+        {heroSlides.map((slide, i) => (
+          <li>
+            <button type="button" class="hero__dot" data-hero-dot={i} aria-label={`Show slide ${i + 1}: ${slide.label}`} aria-current={i === 0 ? 'true' : undefined}>
+              <span class="hero__dot-fill" data-hero-fill></span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <button type="button" class="hero__pause" data-hero-pause aria-label="Pause slideshow">
+        <span class="hero__pause-icon hero__pause-icon--pause"><Icon name="pause" size={14} /></span>
+        <span class="hero__pause-icon hero__pause-icon--play"><Icon name="play" size={12} /></span>
+      </button>
+    </div>
+
+    <a class="hero__scroll" href="#story">
+      <span>Scroll</span>
+      <span class="hero__scroll-line" aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <p class="hero__coords" aria-hidden="true">39.33° N &nbsp;·&nbsp; 84.41° W &nbsp;—&nbsp; {business.city}, {business.state}</p>
 </section>

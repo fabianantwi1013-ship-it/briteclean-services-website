@@ -1,35 +1,36 @@
 ---
+/** Compact services index — used where the full film strip would be too much. */
 import Icon from './Icon.astro';
 import { services } from '../data/site.js';
+
+interface Props {
+  title?: string;
+}
+const { title = 'Our Cleaning Services' } = Astro.props;
 ---
 
-<section class="bc-section bc-section--soft" id="services">
-  <div class="bc-container">
-    <div class="bc-section__head">
-      <span class="bc-eyebrow">What we do</span>
-      <h2>Our Cleaning Services</h2>
-      <p>Homes, offices and commercial spaces — booked around your schedule, cleaned to a standard you can see.</p>
+<section class="section section--paper" id="services">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">What we do</p>
+        <h2 data-split>{title}</h2>
+      </div>
+      <p class="lead">Homes, offices and commercial spaces — booked around your schedule, cleaned to a standard you can see.</p>
     </div>
 
-    <div class="bc-grid bc-grid--4">
-      {services.map((service) => (
-        <a class="bc-service-card" href={`/services#${service.slug}`}>
-          <span class="bc-medallion" aria-hidden="true"><Icon name={service.icon} size={26} /></span>
-          <h3>{service.name}</h3>
-          <p>{service.short}</p>
-          <span class="bc-service-card__more">
-            Learn more
-            <Icon name="arrow" size={15} />
-          </span>
-        </a>
+    <ul class="svc-index-grid">
+      {services.map((service, i) => (
+        <li data-reveal>
+          <a class="svc-tile" href={`/services#${service.slug}`}>
+            <span class="index">{String(i + 1).padStart(2, '0')}</span>
+            <span class="svc-tile__icon" aria-hidden="true"><Icon name={service.icon} size={24} /></span>
+            <span class="svc-tile__name">{service.name}</span>
+            <span class="svc-tile__text">{service.short}</span>
+            <span class="svc-tile__arrow" aria-hidden="true"><Icon name="arrowUpRight" size={18} /></span>
+          </a>
+        </li>
       ))}
-    </div>
-
-    <div class="bc-btn-row" style="justify-content:center;margin-top:36px">
-      <a class="bc-btn bc-btn--primary bc-btn--lg" href="/book-now">
-        Book a Cleaning
-        <Icon name="arrow" size={18} />
-      </a>
-    </div>
+    </ul>
   </div>
 </section>

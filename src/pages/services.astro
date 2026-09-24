@@ -2,54 +2,76 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
+import Img from '../components/Img.astro';
+import Marquee from '../components/Marquee.astro';
+import Process from '../components/Process.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { services } from '../data/site.js';
-import alts from '../data/photo-alt.json';
+
+const total = String(services.length).padStart(2, '0');
 ---
 
 <Layout
   title="Cleaning Services"
   description="Residential, office, deep, commercial, window, move-in, general and emergency cleaning across West Chester, Ohio and surrounding areas."
 >
-  <PageHead title="Services" subtitle="Eight services covering homes, workplaces and everything in between." />
+  <PageHead
+    title="Services"
+    eyebrow="Full service list"
+    subtitle="Eight services covering homes, workplaces and everything in between."
+    photo="scene-loft"
+  />
 
-  <section class="bc-section">
-    <div class="bc-container">
-      <div class="bc-section__head">
-        <span class="bc-eyebrow">Full service list</span>
-        <h2>Everything We Clean</h2>
-        <p>Not sure which you need? Ask us and we will scope it with you.</p>
-      </div>
+  <section class="section svc-page">
+    <div class="container svc-layout">
+      <nav class="svc-nav" aria-label="Services on this page" data-svc-nav>
+        <p class="index svc-nav__title">Everything We Clean</p>
+        <ol>
+          {services.map((s, i) => (
+            <li>
+              <a href={`#${s.slug}`} data-svc-link={s.slug}>
+                <span class="index">{String(i + 1).padStart(2, '0')}</span>
+                <span>{s.name}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p class="svc-nav__note">Not sure which you need? Ask us and we will scope it with you.</p>
+      </nav>
 
-      <div class="bc-btn-row" style="justify-content:center;margin-bottom:44px">
-        {services.map((s) => (
-          <a class="bc-pill" href={`#${s.slug}`}>
-            <span class="bc-pill__dot" aria-hidden="true"><Icon name="check" size={14} /></span>
-            {s.name}
-          </a>
+      <div class="svc-list">
+        {services.map((service, i) => (
+          <article class={`svc-row${i % 2 ? ' svc-row--flip' : ''}`} id={service.slug} data-svc-row={service.slug}>
+            <div class="svc-row__media reveal-frame" data-reveal-img>
+              <div class="parallax" data-parallax="10">
+                <Img photo={`service-${service.slug}`} sizes="(min-width: 1100px) 36vw, 92vw" widths={[480, 800, 1200, 1600]} />
+              </div>
+              <span class="svc-row__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <div class="svc-row__body">
+              <p class="index svc-row__meta">
+                <span class="svc-row__icon" aria-hidden="true"><Icon name={service.icon} size={18} /></span>
+                {String(i + 1).padStart(2, '0')} / {total}
+              </p>
+              <h2 data-split>{service.name}</h2>
+              <p class="svc-row__short">{service.short}</p>
+              <p class="svc-row__long">{service.long}</p>
+              <div class="btn-row">
+                <a class="btn btn--ink" href={`/book-now?service=${service.slug}`}>
+                  Book this <span class="btn__icon"><Icon name="arrow" size={16} /></span>
+                </a>
+                <a class="link-line" href="/contact">Ask a question</a>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
-
-      {services.map((service) => (
-        <article class="bc-service-detail" id={service.slug}>
-          <div class="bc-service-detail__head">
-            <span class="bc-medallion bc-medallion--lg" aria-hidden="true"><Icon name={service.icon} size={32} /></span>
-            <h2>{service.name}</h2>
-            <a class="bc-btn bc-btn--primary bc-btn--sm" href={`/book-now?service=${service.slug}`}>
-              Book this
-              <Icon name="arrow" size={15} />
-            </a>
-          </div>
-          <div>
-            <p class="bc-lead" style="color:var(--bc-ink);font-weight:600">{service.short}</p>
-            <div class="bc-content"><p>{service.long}</p></div>
-          </div>
-        </article>
-      ))}
     </div>
   </section>
 
+  <Marquee />
+  <Process />
   <WhyChooseUs />
-  <CtaBand />
+  <CtaBand photo="scene-bath" />
 </Layout>

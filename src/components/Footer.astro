@@ -1,43 +1,60 @@
 ---
 import Icon from './Icon.astro';
-import TrustBadges from './TrustBadges.astro';
-import { business, phoneDigits, hero } from '../data/site.js';
+import { business, phoneDigits, whatsappUrl, hero, trustBadges } from '../data/site.js';
 
-const socialIcons = { facebook: 'check', instagram: 'star', google: 'pin', yelp: 'heart' };
 const socialLabels = { facebook: 'Facebook', instagram: 'Instagram', google: 'Google Business Profile', yelp: 'Yelp' };
 const socials = Object.entries(business.social).filter(([, url]) => url);
 const year = new Date().getFullYear();
+const tel = (p) => `tel:+${phoneDigits(p)}`;
 ---
 
-<TrustBadges />
+<footer class="site-footer on-ink grain">
+  <div class="container">
+    <ul class="footer__trust" aria-label="Our commitments">
+      {trustBadges.map((badge) => (
+        <li>
+          <span class="footer__trust-icon" aria-hidden="true"><Icon name={badge.icon} size={16} /></span>
+          {badge.title}
+        </li>
+      ))}
+    </ul>
 
-<footer class="bc-footer">
-  <div class="bc-container">
-    <div class="bc-footer__grid">
-      <div>
-        <h3 class="bc-footer__heading">{business.name}</h3>
+    <div class="footer__lead">
+      <p class="footer__statement" data-split>
+        {business.taglineSecondary.split(', ')[0]},<br /><em>{business.taglineSecondary.split(', ')[1]}</em>
+      </p>
+      <div class="footer__lead-actions">
+        <a class="btn btn--accent btn--lg" href="/book-now" data-magnetic>
+          {hero.ctaPrimary}
+          <span class="btn__icon"><Icon name="arrow" size={16} /></span>
+        </a>
+        <a class="link-line" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
+          <Icon name="whatsapp" size={18} /> Message us on WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="/img/brand/logo-white.png" alt={business.name} width="477" height="134" loading="lazy" />
         <p>{hero.subheadline}</p>
-        <p class="bc-footer__tagline">{business.tagline}</p>
         {socials.length > 0 && (
-          <div class="bc-social">
+          <div class="footer__social">
             {socials.map(([network, url]) => (
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                <span class="screen-reader-text">{socialLabels[network]}</span>
-                <Icon name={socialIcons[network]} size={18} />
-              </a>
+              <a href={url} target="_blank" rel="noopener noreferrer">{socialLabels[network]}</a>
             ))}
           </div>
         )}
       </div>
 
       <div>
-        <h3 class="bc-footer__heading">Get in touch</h3>
-        <ul>
-          <li><a href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a></li>
-          <li><a href={`tel:+${phoneDigits(business.phoneSecondary)}`}>{business.phoneSecondary}</a></li>
+        <h2 class="footer__heading">Get in touch</h2>
+        <ul class="footer__list">
+          <li><a href={tel(business.phonePrimary)}>{business.phonePrimary}</a></li>
+          <li><a href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a></li>
           <li><a href={`mailto:${business.email}`}>{business.email}</a></li>
           <li>
-            <address style="font-style:normal">
+            <address>
               {business.street}<br />
               {business.city}, {business.state} {business.postal}
             </address>
@@ -46,8 +63,8 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <h3 class="bc-footer__heading">Explore</h3>
-        <ul>
+        <h2 class="footer__heading">Explore</h2>
+        <ul class="footer__list">
           <li><a href="/services">Services</a></li>
           <li><a href="/about">About</a></li>
           <li><a href="/faq">FAQ</a></li>
@@ -57,8 +74,8 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <h3 class="bc-footer__heading">Opening hours</h3>
-        <dl class="bc-footer__hours">
+        <h2 class="footer__heading">Opening hours</h2>
+        <dl class="footer__hours">
           {business.hours.map((h) => (
             <div>
               <dt>{h.days}</dt>
@@ -69,9 +86,14 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div class="bc-footer__bottom">
+    <p class="footer__mega" aria-hidden="true" data-footer-mega>Briteclean</p>
+
+    <div class="footer__bottom">
       <p>© {year} {business.name}. All rights reserved.</p>
-      <p>{business.taglineSecondary}</p>
+      <p>{business.tagline}</p>
+      <a class="footer__top" href="#main" data-to-top>
+        Back to top <Icon name="arrowUp" size={16} />
+      </a>
     </div>
   </div>
 </footer>

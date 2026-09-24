@@ -49,7 +49,6 @@ export const hero = {
   subheadline: 'We make your home or business cleaner, fresher and healthier.',
   ctaPrimary: 'Get a Free Quote',
   ctaSecondary: 'Call Now',
-  image: '/img/photos/hero-kitchen-counter.jpg',
 };
 
 /**
@@ -64,7 +63,6 @@ export const services = [
     icon: 'home',
     short: 'Regular upkeep for houses and apartments, on a schedule that fits your week.',
     long: 'Routine cleaning for the spaces you actually live in. We cover kitchens, bathrooms, bedrooms and living areas — dusting, vacuuming, mopping, surface sanitising and bin changes — on a weekly, fortnightly or monthly rhythm. Same team each visit wherever we can manage it, so nobody has to re-explain how you like things done.',
-    photo: '/img/photos/service-residential-cleaning.jpg',
   },
   {
     slug: 'office-cleaning',
@@ -72,7 +70,6 @@ export const services = [
     icon: 'briefcase',
     short: 'Desks, common areas and washrooms kept presentable for staff and visitors.',
     long: 'Scheduled cleaning for workplaces, timed around your business hours so nobody is vacuuming past a meeting. Workstations, meeting rooms, kitchens, washrooms and entryways, with waste and recycling handled. Evening and early-morning slots available.',
-    photo: '/img/photos/service-office-cleaning.jpg',
   },
   {
     slug: 'deep-cleaning',
@@ -80,7 +77,6 @@ export const services = [
     icon: 'sparkle',
     short: 'A top-to-bottom reset that reaches what routine cleaning skips.',
     long: 'The full detail pass: inside appliances, behind and under furniture, skirting boards, door frames, light fittings, tile grout, and built-up limescale in bathrooms and kitchens. Worth booking seasonally, before hosting, or as a first visit to bring a property up to a standard that routine cleaning can then hold.',
-    photo: '/img/photos/service-deep-cleaning.jpg',
   },
   {
     slug: 'commercial-cleaning',
@@ -88,7 +84,6 @@ export const services = [
     icon: 'building',
     short: 'Retail units, clinics and shared facilities, cleaned to a consistent standard.',
     long: 'Larger premises and higher-traffic environments — retail floors, waiting rooms, clinics, gyms, lobbies and shared facilities. We agree a written scope and checklist so standards stay consistent across visits and across staff, and we work to whatever compliance requirements your sector expects.',
-    photo: '/img/photos/service-commercial-cleaning.jpg',
   },
   {
     slug: 'window-cleaning',
@@ -96,7 +91,6 @@ export const services = [
     icon: 'window',
     short: 'Streak-free glass inside and out, frames and sills included.',
     long: 'Interior and accessible exterior glass cleaned streak-free, with frames, sills and tracks wiped down rather than left behind. Available as a standalone visit or folded into a deep clean. Tell us about upper floors when you enquire so we bring the right access equipment.',
-    photo: '/img/photos/service-window-cleaning.jpg',
   },
   {
     slug: 'move-in-cleaning',
@@ -104,7 +98,6 @@ export const services = [
     icon: 'box',
     short: 'An empty property made genuinely ready for the first night.',
     long: 'For the gap between keys and furniture. Every room cleaned while it is empty and easy to reach — cupboards and drawers inside and out, appliances, bathrooms, floors and windows. Also available as a move-out clean when you need a property handed back in good condition.',
-    photo: '/img/photos/service-move-in-cleaning.jpg',
   },
   {
     slug: 'general-cleaning',
@@ -112,7 +105,6 @@ export const services = [
     icon: 'broom',
     short: 'A flexible one-off visit, scoped to whatever you need most.',
     long: 'Not everything fits a category. Tell us what needs doing — after a party, ahead of guests, a single room that has got away from you — and we will scope a one-off visit around it rather than selling you a package you do not need.',
-    photo: '/img/photos/service-general-cleaning.jpg',
   },
   {
     slug: 'emergency-cleaning',
@@ -120,7 +112,6 @@ export const services = [
     icon: 'bolt',
     short: 'Short-notice response when something cannot wait until next week.',
     long: 'Short-notice cleaning for the situations you did not plan for: a spill before an inspection, a last-minute viewing, a post-event turnaround. Call rather than use the form when it is genuinely urgent — we will tell you honestly what we can reach and when.',
-    photo: '/img/photos/service-emergency-cleaning.jpg',
   },
 ];
 
@@ -191,4 +182,59 @@ export const faqs = [
   { q: 'What if I am not happy with the clean?', a: 'Tell us within 24 hours and we will come back and put it right. That is what our satisfaction guarantee means in practice — not a refund process, just the work done properly.' },
   { q: 'Can I change or cancel a booking?', a: 'Yes. Because every booking is confirmed with a person rather than an automated calendar, rescheduling is a phone call. We only ask for as much notice as you can reasonably give.' },
   { q: 'Which areas do you cover?', a: `We serve ${business.serviceArea} If you are just outside that, ask anyway — we will give you a straight answer.` },
+];
+
+/* ---------------------------------------------------------------------------
+ * Redesign content. Everything below is derived from the copy above or the FAQ —
+ * no new claims. Keep it that way: nothing here should state a number or promise
+ * the business has not made elsewhere.
+ * ------------------------------------------------------------------------- */
+
+/** Hero slideshow. `photo` is a key in src/data/photos.js. */
+export const heroSlides = [
+  { photo: 'scene-living', label: 'Living spaces', position: '50% 62%' },
+  { photo: 'scene-kitchen', label: 'Kitchens', position: '50% 55%' },
+  { photo: 'scene-loft', label: 'Open-plan homes', position: '50% 50%' },
+  { photo: 'scene-bath', label: 'Bathrooms', position: '50% 60%' },
+];
+
+/** Facts shown as counters. Each one is stated elsewhere on the site. */
+export const facts = [
+  { value: 8, suffix: '', label: 'Specialist cleaning services' },
+  { value: 5, suffix: '', label: 'Simple steps to request a booking' },
+  { value: 1, suffix: '', label: 'Business day, at most, to hear back' },
+  { value: 0, prefix: '$', suffix: '', label: 'Taken online — you pay nothing to book' },
+];
+
+/** How booking works, paraphrasing the FAQ answers. */
+export const process = [
+  {
+    title: 'Request',
+    text: 'Tell us what needs cleaning and when, in five short steps. No account, no payment.',
+  },
+  {
+    title: 'Confirm',
+    text: 'A real person reviews your request, calls to agree the details and timing, and confirms the price before anything is scheduled.',
+  },
+  {
+    title: 'Clean',
+    text: 'Our trained, background-checked team arrives with everything needed — eco-friendly products that are safe for children and pets.',
+  },
+  {
+    title: 'Guarantee',
+    text: 'Not happy with something? Tell us within 24 hours and we will come back and put it right.',
+  },
+];
+
+/**
+ * Service-area map. Coordinates are approximate town centres, used only to place
+ * the dots on a stylised map — not for navigation.
+ */
+export const areaTowns = [
+  { name: 'West Chester', lat: 39.3312, lng: -84.4077, hub: true },
+  { name: 'Liberty Township', lat: 39.3845, lng: -84.4302 },
+  { name: 'Mason', lat: 39.3601, lng: -84.3099 },
+  { name: 'Fairfield', lat: 39.3454, lng: -84.5603 },
+  { name: 'Hamilton', lat: 39.3995, lng: -84.5613 },
+  { name: 'Sharonville', lat: 39.2681, lng: -84.4133 },
 ];

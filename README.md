@@ -1,7 +1,52 @@
 # Briteclean Services LLC — Website
 
-A hand-coded WordPress theme and a custom booking plugin for Briteclean Services LLC,
-a cleaning company in West Chester, Ohio.
+Live at **https://britecleanservices.com** — an Astro static site on Vercel. Booking and
+contact requests are emailed through Resend by the functions in `api/`.
+
+## The site
+
+```
+src/
+├── data/site.js        ← every piece of copy: business details, services, FAQs, reviews
+├── data/photos.js      ← photo registry (Pexels placeholders — replace with real photos)
+├── assets/photos/      ← source photos; Astro builds AVIF/WebP sizes from these
+├── components/         ← one file per section (Hero, ServicesRail, Process, …)
+├── pages/              ← index, services, about, faq, contact, book-now, 404
+├── scripts/
+│   ├── booking-form.js ← multi-step form (field names are a contract with api/)
+│   └── motion/         ← intro, hero slideshow, scroll reveals, smooth scroll
+└── styles/             ← tokens → base → chrome → sections → form → motion
+api/                    ← Vercel functions: booking.js, contact.js, _lib/
+```
+
+**Design system.** Deep navy base, cobalt blue for action, light red and light green as
+accents, white canvas; Instrument Serif for display, Manrope for text. Every colour
+pairing and its WCAG contrast ratio is listed at the top of `src/styles/tokens.css` —
+light red and light green only ever carry navy text.
+
+**Motion.** GSAP (ScrollTrigger, SplitText) with Lenis smooth scrolling: a title
+sequence on the first homepage visit of a session, a wiping hero slideshow, headings that
+rise line by line, a pinned horizontal services strip, and cross-page transitions via the
+View Transitions API. Visitors who ask for reduced motion get a still, fully working site;
+if the motion script ever fails to load, a timer reveals everything anyway.
+
+**Editing.** Copy changes go in `src/data/site.js`. To replace a photo, drop a new file
+into `src/assets/photos/` with the same name and update its alt text in
+`src/data/photos.js`.
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # static output in dist/
+```
+
+---
+
+## Legacy: WordPress build
+
+Everything below documents the original WordPress theme and booking plugin in
+`wp-content/`, which the Astro site replaced. It is kept for reference only and is not
+deployed.
 
 ```
 cleaning website/
