@@ -106,21 +106,39 @@ safe('intro', () =>
   }),
 );
 
-safe('reviews', () => initReviews(ctx));
-safe('services nav', () => initServicesNav(ctx));
-safe('rail', () => initRail(ctx));
+/*
+ * Everything below the fold is set up in small slices, handing control back to the
+ * browser between each one, so start-up never blocks input as one long task. The
+ * rail goes first because its pin spacing moves every trigger after it.
+ */
+const deferred = [
+  ['rail', () => initRail(ctx)],
+  ['reviews', () => initReviews(ctx)],
+  ['services nav', () => initServicesNav(ctx)],
+  ...(motion
+    ? [
+        ['reveals', () => initReveals(ctx)],
+        ['process', () => initProcess(ctx)],
+        ['marquee', () => initMarquee(ctx)],
+        ['cursor', () => initCursor(ctx)],
+        ['magnetic', () => initMagnetic(ctx)],
+        ['faq', () => initFaq(ctx)],
+      ]
+    : []),
+];
 
-if (motion) {
-  safe('reveals', () => initReveals(ctx));
-  safe('process', () => initProcess(ctx));
-  safe('marquee', () => initMarquee(ctx));
-  safe('cursor', () => initCursor(ctx));
-  safe('magnetic', () => initMagnetic(ctx));
-  safe('faq', () => initFaq(ctx));
-}
+const yieldToMain = () =>
+  globalThis.scheduler?.yield ? globalThis.scheduler.yield() : new Promise((resolve) => setTimeout(resolve, 0));
 
-// Layout shifts once the web fonts arrive; re-measure every trigger.
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => ScrollTrigger.refresh());
-}
-window.addEventListener('load', () => ScrollTrigger.refresh());
+(async () => {
+  for (const [name, init] of deferred) {
+    await yieldToMain();
+    safe(name, init);
+  }
+  // One measuring pass once everything exists and the web fonts have settled the
+  // layout. Each refresh re-measures every trigger, so it is kept to this single call
+  // (ScrollTrigger also refreshes itself on resize, and on load if that is still to come).
+  await (document.fonts?.ready ?? Promise.resolve());
+  await yieldToMain();
+  ScrollTrigger.refresh();
+})();

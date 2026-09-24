@@ -8,8 +8,8 @@
  * form      booking & contact forms (class names are a contract with the JS)
  * motion    pre-animation states, gated on the `motion` class
  *
- * Fonts (Instrument Serif, Manrope) are self-hosted; their @font-face rules live in
- * Layout.astro so the preload links and the rules point at the same hashed files.
+ * Fonts (Instrument Serif, Manrope) are self-hosted through the Astro Fonts API —
+ * see astro.config.mjs.
  */
 
 @import './tokens.css';

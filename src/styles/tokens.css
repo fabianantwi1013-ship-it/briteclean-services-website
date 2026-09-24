@@ -48,8 +48,9 @@
 	--line-strong: rgba(10, 24, 48, .22);
 	--line-on-ink: rgba(255, 255, 255, .14);
 
-	--font-display: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-	--font-sans: 'Manrope Variable', 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	/* Families and their size-matched fallbacks come from the Astro Fonts API. */
+	--font-display: var(--font-serif-family, Georgia, serif);
+	--font-sans: var(--font-sans-family, system-ui, sans-serif);
 
 	--fs-mega: clamp(3.4rem, 10.5vw, 11rem);
 	--fs-display: clamp(3.1rem, 7.6vw, 7.75rem);
