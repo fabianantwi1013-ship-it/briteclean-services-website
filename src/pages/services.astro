@@ -13,14 +13,15 @@ import { services } from '../data/site.js';
 >
   <PageHead title="Our Services" subtitle="Homes, offices and commercial spaces." photo="scene-loft" />
 
-  <section class="section">
+  <section class="section tint aurora">
     <div class="container services-list">
-      {services.map((service) => (
-        <article class="service" id={service.slug} data-reveal>
-          <div class="service__media">
+      {services.map((service, i) => (
+        <article class={`service service--${i % 3}`} id={service.slug}>
+          <div class="service__media" data-reveal="image">
             <Img photo={`service-${service.slug}`} sizes="(min-width: 800px) 40vw, 92vw" widths={[480, 720, 960]} />
           </div>
-          <div class="service__body">
+          <div class="service__body" data-reveal>
+            <span class="service__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <span class="service__icon" aria-hidden="true"><Icon name={service.icon} size={20} /></span>
             <h2>{service.name}</h2>
             <p>{service.long}</p>

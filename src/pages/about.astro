@@ -13,9 +13,9 @@ import { business } from '../data/site.js';
 >
   <PageHead title="About Us" subtitle={business.tagline} photo="scene-light" position="50% 40%" />
 
-  <section class="section">
-    <div class="container split" data-reveal>
-      <div class="split__text">
+  <section class="section tint aurora">
+    <div class="container split">
+      <div class="split__text" data-reveal>
         <h2>{business.taglineSecondary}</h2>
         <p>
           {business.name} is a cleaning company based in {business.city}, {business.state}. We clean homes,
@@ -27,8 +27,14 @@ import { business } from '../data/site.js';
         </p>
         <a class="btn" href="/book-now">Book a Cleaning</a>
       </div>
-      <div class="split__media">
-        <Img photo="about-team" sizes="(min-width: 900px) 45vw, 92vw" widths={[640, 960, 1280]} />
+      <div class="split__media" data-reveal="image">
+        <div class="fader" data-fader>
+          {['about-team', 'scene-living', 'service-residential-cleaning'].map((photo, i) => (
+            <div class={`fader__frame${i === 0 ? ' is-active' : ''}`}>
+              <Img photo={photo} alt={i === 0 ? undefined : ''} sizes="(min-width: 900px) 45vw, 92vw" widths={[640, 960, 1280]} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>

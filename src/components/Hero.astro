@@ -1,8 +1,9 @@
 ---
 /**
- * Homepage hero: a slow crossfade between four interiors, with the headline and two
- * calls to action. The first photo is the only one loaded up front. The slideshow
- * never autoplays for visitors who ask for reduced motion, and can always be paused.
+ * Homepage hero. Photos change with a diagonal wipe led by a glowing light-green
+ * edge; each progress bar fills over six seconds and its animation ending is what
+ * advances the slide, so pausing is exact. Only the first photo loads up front.
+ * No autoplay under reduced motion; always pausable.
  */
 import Icon from './Icon.astro';
 import Img from './Img.astro';
@@ -16,7 +17,7 @@ const [lead, tail] = hero.headline.split(' for ');
 <section class="hero" data-hero aria-label="Introduction">
   <div class="hero__slides" aria-hidden="true">
     {heroSlides.map((slide, i) => (
-      <div class={`hero__slide${i === 0 ? ' is-active' : ''}`} data-slide>
+      <div class={`hero__slide${i === 0 ? ' is-active is-first' : ''}`} data-slide>
         <Img
           photo={slide.photo}
           alt=""
@@ -28,6 +29,7 @@ const [lead, tail] = hero.headline.split(' for ');
         />
       </div>
     ))}
+    <span class="hero__edge" data-edge></span>
   </div>
   <div class="hero__shade" aria-hidden="true"></div>
 
@@ -35,7 +37,7 @@ const [lead, tail] = hero.headline.split(' for ');
     <p class="hero__badge"><Icon name="sparkle" size={14} /> {hero.badge}</p>
     <h1 class="hero__title">{lead} <span>for {tail}</span></h1>
     <p class="hero__sub">{hero.subheadline}</p>
-    <div class="btn-row">
+    <div class="btn-row hero__actions">
       <a class="btn btn--accent btn--lg" href="/book-now">{hero.ctaPrimary}</a>
       <a class="btn btn--outline-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
         <Icon name="phone" size={18} /> {hero.ctaSecondary}
@@ -44,9 +46,9 @@ const [lead, tail] = hero.headline.split(' for ');
   </div>
 
   <div class="container hero__controls" data-hero-controls hidden>
-    <div class="hero__dots">
+    <div class="hero__bars" data-bars>
       {heroSlides.map((_, i) => (
-        <button type="button" class="hero__dot" data-dot={i} aria-label={`Show photo ${i + 1}`} aria-pressed={i === 0 ? 'true' : 'false'}></button>
+        <button type="button" class="hero__bar" data-dot={i} aria-label={`Show photo ${i + 1}`} aria-pressed={i === 0 ? 'true' : 'false'}></button>
       ))}
     </div>
     <button type="button" class="hero__pause" data-pause aria-label="Pause slideshow">

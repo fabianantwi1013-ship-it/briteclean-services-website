@@ -13,11 +13,12 @@ const { photo = 'scene-kitchen' } = Astro.props;
   <div class="cta__media" aria-hidden="true">
     <Img photo={photo} alt="" sizes="100vw" widths={[640, 1280, 1920]} />
   </div>
+  <div class="cta__glow" aria-hidden="true"></div>
   <div class="container cta__inner" data-reveal>
-    <h2>Ready for a Sparkling Clean Space?</h2>
+    <h2>Ready for a <span class="grad-text grad-text--warm">Sparkling</span> Clean Space?</h2>
     <p>{business.taglineSecondary}.</p>
     <div class="btn-row">
-      <a class="btn btn--accent btn--lg" href="/book-now">{hero.ctaPrimary}</a>
+      <a class="btn btn--accent btn--lg btn--shine" href="/book-now">{hero.ctaPrimary}</a>
       <a class="btn btn--outline-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
         <Icon name="phone" size={18} /> {business.phonePrimary}
       </a>

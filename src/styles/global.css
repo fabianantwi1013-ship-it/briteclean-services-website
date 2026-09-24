@@ -5,6 +5,7 @@
  * base     reset, typography, buttons, reveal
  * layout   header, menu, footer and every page section
  * form     booking and contact forms (class names are a contract with the JS)
+ * effects  title sequence, colour washes, photo ribbon, reveals, flourishes
  *
  * The one typeface, Montserrat, is self-hosted through the Astro Fonts API; see
  * astro.config.mjs.
@@ -13,3 +14,4 @@
 @import './base.css';
 @import './layout.css';
 @import './form.css';
+@import './effects.css';

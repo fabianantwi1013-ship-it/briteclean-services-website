@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import Img from './Img.astro';
 import { services } from '../data/site.js';
 
@@ -8,22 +9,25 @@ interface Props {
 const { title = 'Our Services' } = Astro.props;
 ---
 
-<section class="section" id="services">
+<section class="section tint aurora" id="services">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <h2>{title}</h2>
       <a class="link-arrow" href="/services">View all services</a>
     </div>
 
-    <ul class="cards" data-reveal>
-      {services.map((service) => (
-        <li>
+    <ul class="cards" data-reveal="stagger">
+      {services.map((service, i) => (
+        <li style={`--i:${i}`}>
           <a class="card" href={`/services#${service.slug}`}>
             <span class="card__media">
               <Img photo={`service-${service.slug}`} alt="" sizes="(min-width: 1000px) 22vw, (min-width: 600px) 45vw, 50vw" widths={[320, 480, 640]} />
+              <span class={`card__chip card__chip--${i % 3}`} aria-hidden="true"><Icon name={service.icon} size={18} /></span>
             </span>
-            <span class="card__title">{service.name}</span>
-            <span class="card__text">{service.short}</span>
+            <span class="card__body">
+              <span class="card__title">{service.name}</span>
+              <span class="card__text">{service.short}</span>
+            </span>
           </a>
         </li>
       ))}

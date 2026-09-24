@@ -2,7 +2,9 @@
  * Site behaviour, in plain JavaScript with no libraries:
  *   header   solid background once the page scrolls
  *   menu     full-screen menu on small screens, focus-trapped, Escape to close
- *   hero     slow crossfade slideshow with dots and a pause button
+ *   intro    skip button for the homepage title sequence (the sequence itself is CSS)
+ *   hero     diagonal-wipe slideshow; each progress bar's CSS animation advances it
+ *   fader    small crossfading photo slideshows (About page)
  *   reveal   sections below the fold fade in once as they scroll into view
  *
  * Scrolling is always the browser's own. Nothing here runs on every scroll frame
@@ -78,45 +80,87 @@ if (toggle && menu) {
   window.matchMedia('(min-width: 1000px)').addEventListener('change', (e) => e.matches && open && setOpen(false, false));
 }
 
+/* ---- Intro ------------------------------------------------------------------ */
+
+const skip = document.querySelector('[data-intro-skip]');
+const endIntro = () => {
+  clearTimeout(window.__bcIntroEnd);
+  root.classList.remove('intro-on', 'intro-played');
+};
+skip?.addEventListener('click', endIntro);
+if (root.classList.contains('intro-on')) {
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && endIntro(), { once: true });
+}
+
 /* ---- Hero slideshow ---------------------------------------------------------- */
 
 const hero = document.querySelector('[data-hero]');
 if (hero) {
   const slides = [...hero.querySelectorAll('[data-slide]')];
-  const dots = [...hero.querySelectorAll('[data-dot]')];
+  const bars = [...hero.querySelectorAll('[data-dot]')];
   const pause = hero.querySelector('[data-pause]');
   const controls = hero.querySelector('[data-hero-controls]');
-  const INTERVAL = 6000;
+  const edge = hero.querySelector('[data-edge]');
   let current = 0;
-  let timer = null;
   let paused = reduceMotion;
-  let visible = true;
 
   const show = (i) => {
-    current = (i + slides.length) % slides.length;
-    slides.forEach((s, k) => s.classList.toggle('is-active', k === current));
-    dots.forEach((d, k) => d.setAttribute('aria-pressed', String(k === current)));
+    const next = (i + slides.length) % slides.length;
+    if (next === current) return;
+    const prev = slides[current];
+    current = next;
+    slides.forEach((s) => s.classList.remove('is-first'));
+    prev.classList.remove('is-active');
+    prev.classList.add('is-prev');
+    slides[current].classList.add('is-active');
+    bars.forEach((b, k) => b.setAttribute('aria-pressed', String(k === current)));
+    if (edge && !reduceMotion) {
+      edge.classList.remove('is-running');
+      void edge.offsetWidth; // restart the sweep
+      edge.classList.add('is-running');
+    }
+    setTimeout(() => prev.classList.remove('is-prev'), reduceMotion ? 0 : 1300);
   };
 
-  const schedule = () => {
-    clearInterval(timer);
-    timer = null;
-    if (!paused && visible && !document.hidden) timer = setInterval(() => show(current + 1), INTERVAL);
+  const sync = () => {
     hero.classList.toggle('is-paused', paused);
     pause?.setAttribute('aria-label', paused ? 'Play slideshow' : 'Pause slideshow');
   };
 
   if (slides.length > 1 && controls) {
     controls.hidden = false;
-    dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); schedule(); }));
-    pause?.addEventListener('click', () => { paused = !paused; schedule(); });
-    document.addEventListener('visibilitychange', schedule);
+    bars.forEach((bar, i) => bar.addEventListener('click', () => show(i)));
+    pause?.addEventListener('click', () => { paused = !paused; sync(); });
+    // The active bar's fill animation ending is the cue for the next photo.
+    controls.addEventListener('animationend', (e) => {
+      if (e.animationName === 'hero-progress' && !paused && !reduceMotion) show(current + 1);
+    });
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule(); }).observe(hero);
+      new IntersectionObserver(([entry]) => hero.classList.toggle('is-offscreen', !entry.isIntersecting)).observe(hero);
     }
-    schedule();
+    sync();
   }
 }
+
+/* ---- Crossfading photo slideshows ------------------------------------------- */
+
+document.querySelectorAll('[data-fader]').forEach((fader) => {
+  const frames = [...fader.children];
+  if (frames.length < 2 || reduceMotion) return;
+  let i = 0;
+  let timer = null;
+  const run = (on) => {
+    clearInterval(timer);
+    if (on) timer = setInterval(() => {
+      frames[i].classList.remove('is-active');
+      i = (i + 1) % frames.length;
+      frames[i].classList.add('is-active');
+    }, 4500);
+  };
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => run(entry.isIntersecting && !document.hidden)).observe(fader);
+  }
+});
 
 /* ---- Reveal on scroll -------------------------------------------------------- */
 

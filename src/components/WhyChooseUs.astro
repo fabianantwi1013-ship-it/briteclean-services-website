@@ -3,12 +3,12 @@ import Icon from './Icon.astro';
 import { valueProps, business } from '../data/site.js';
 ---
 
-<section class="section section--ink" id="why-us">
+<section class="section section--ink aurora aurora--dark" id="why-us">
   <div class="container">
-    <h2 class="section-title">Why Choose {business.name}?</h2>
-    <ul class="values" data-reveal>
-      {valueProps.map((prop) => (
-        <li class="value">
+    <h2 class="section-title" data-reveal>Why Choose <span class="grad-text">{business.name}</span>?</h2>
+    <ul class="values" data-reveal="stagger">
+      {valueProps.map((prop, i) => (
+        <li class="value" style={`--i:${i}`}>
           <span class="value__icon" aria-hidden="true"><Icon name={prop.icon} size={20} /></span>
           <h3>{prop.title}</h3>
           <p>{prop.text}</p>

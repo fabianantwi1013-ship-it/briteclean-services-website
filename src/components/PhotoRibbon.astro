@@ -1,0 +1,40 @@
+---
+/**
+ * A slow, endless ribbon of photographs. The set is rendered twice so the loop is
+ * seamless; the second copy is hidden from assistive tech. Pauses on hover, and is a
+ * plain swipeable row under reduced motion.
+ */
+import Img from './Img.astro';
+
+const frames = [
+  { photo: 'scene-living', shape: 'tall' },
+  { photo: 'service-residential-cleaning', shape: 'wide' },
+  { photo: 'scene-kitchen', shape: 'wide' },
+  { photo: 'detail-sink', shape: 'tall' },
+  { photo: 'scene-loft', shape: 'wide' },
+  { photo: 'service-window-cleaning', shape: 'tall' },
+  { photo: 'scene-bath', shape: 'wide' },
+  { photo: 'scene-light', shape: 'tall' },
+  { photo: 'service-office-cleaning', shape: 'wide' },
+];
+---
+
+<section class="ribbon" aria-labelledby="ribbon-title">
+  <div class="container ribbon__head" data-reveal>
+    <h2 id="ribbon-title">Every Space, <span>Spotless</span></h2>
+    <a class="link-arrow" href="/book-now">Book your clean</a>
+  </div>
+  <div class="ribbon__viewport">
+    <div class="ribbon__track">
+      {[0, 1].map((copy) => (
+        <ul class="ribbon__set" aria-hidden={copy === 1 ? 'true' : undefined}>
+          {frames.map((f) => (
+            <li class={`ribbon__frame ribbon__frame--${f.shape}`}>
+              <Img photo={f.photo} alt={copy === 1 ? '' : undefined} sizes="360px" widths={[360, 540]} />
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+</section>

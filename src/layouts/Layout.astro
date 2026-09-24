@@ -4,6 +4,7 @@ import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Intro from '../components/Intro.astro';
 import Schema from '../components/Schema.astro';
 import { business } from '../data/site.js';
 
@@ -14,9 +15,11 @@ interface Props {
   image?: string;
   /** Set on the homepage, where the title should not be suffixed. */
   bare?: boolean;
+  /** Play the opening title sequence (homepage). */
+  intro?: boolean;
 }
 
-const { title, description, image = '/img/og.jpg', bare = false } = Astro.props;
+const { title, description, image = '/img/og.jpg', bare = false, intro = false } = Astro.props;
 
 const fullTitle = bare ? title : `${title} | ${business.name}`;
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
@@ -24,7 +27,7 @@ const ogImage = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-page={intro ? 'home' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -32,6 +35,26 @@ const ogImage = new URL(image, Astro.site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#0A1830" />
+
+    {/*
+      Runs before first paint. `js` lets below-the-fold sections fade in; `intro`
+      plays the homepage title sequence once per session (never under reduced
+      motion). The class is removed after 2.6s whatever happens.
+    */}
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          if (d.getAttribute('data-page') === 'home' && !sessionStorage.getItem('bc-intro') &&
+              !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            sessionStorage.setItem('bc-intro', '1');
+            d.classList.add('intro-on', 'intro-played');
+            window.__bcIntroEnd = setTimeout(function () { d.classList.remove('intro-on'); }, 2600);
+          }
+        } catch (e) {}
+      })();
+    </script>
 
     <Font cssVariable="--font-sans-family" preload />
 
@@ -54,6 +77,8 @@ const ogImage = new URL(image, Astro.site).href;
 
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    {intro && <Intro />}
 
     <Header />
 

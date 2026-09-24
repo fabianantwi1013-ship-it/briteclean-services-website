@@ -4,16 +4,18 @@ import Hero from '../components/Hero.astro';
 import TrustBadges from '../components/TrustBadges.astro';
 import ServicesGrid from '../components/ServicesGrid.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
+import PhotoRibbon from '../components/PhotoRibbon.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { business, hero } from '../data/site.js';
 
 const description = `${hero.subheadline} Residential, office and commercial cleaning in ${business.city}, ${business.state} and nearby areas.`;
 ---
 
-<Layout title={`${business.name} | ${business.tagline}`} description={description} bare>
+<Layout title={`${business.name} | ${business.tagline}`} description={description} bare intro>
   <Hero />
   <TrustBadges />
   <ServicesGrid />
   <WhyChooseUs />
+  <PhotoRibbon />
   <CtaBand />
 </Layout>

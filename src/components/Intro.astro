@@ -1,0 +1,47 @@
+---
+/**
+ * Opening title sequence, about 2.5 seconds, homepage only.
+ *
+ *   0.1s  BRITE rises letter by letter in white, CLEAN follows in light green
+ *   0.8s  a sparkle pops above the I (the logo's sparkle)
+ *   1.0s  a band of light sweeps across the name; the tagline opens out
+ *   1.5s  the name lifts away and a glowing seam draws across the screen
+ *   1.85s the screen splits along the seam, top up and bottom down, onto the hero
+ *
+ * Pure CSS keyframes (transform and opacity only), so it costs nothing to run and the
+ * page underneath paints normally. The inline script in Layout.astro decides whether
+ * it plays: once per browser session, never under reduced motion, never without JS.
+ */
+import { business } from '../data/site.js';
+
+const brite = ['B', 'R', 'I', 'T', 'E'];
+const clean = ['C', 'L', 'E', 'A', 'N'];
+---
+
+<div class="intro" aria-hidden="true">
+  <div class="intro__panel intro__panel--top"></div>
+  <div class="intro__panel intro__panel--bottom"></div>
+  <div class="intro__seam"></div>
+
+  <div class="intro__brand">
+    <p class="intro__word">
+      <span class="intro__part intro__part--brite">
+        {brite.map((l, i) => (
+          <span class="intro__l" style={`--i:${i}`}>
+            {l}
+            {l === 'I' && (
+              <svg class="intro__spark" viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" /></svg>
+            )}
+          </span>
+        ))}
+      </span>
+      <span class="intro__part intro__part--clean">
+        {clean.map((l, i) => (
+          <span class="intro__l" style={`--i:${i + 5}`}>{l}</span>
+        ))}
+      </span>
+    </p>
+    <p class="intro__tag">Services LLC <span aria-hidden="true">·</span> {business.tagline}</p>
+  </div>
+</div>
+<button class="intro-skip" type="button" data-intro-skip>Skip intro</button>
