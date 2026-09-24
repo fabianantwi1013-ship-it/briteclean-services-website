@@ -12,7 +12,6 @@ import sceneLoft from '../assets/photos/scene-loft.jpg'; // 28456460
 import sceneBath from '../assets/photos/scene-bath.jpg'; // 7045908
 import sceneLight from '../assets/photos/scene-light.jpg'; // 35523270
 import detailSink from '../assets/photos/detail-sink.jpg'; // 5904036
-import heroCounter from '../assets/photos/hero-kitchen-counter.jpg'; // 4008518
 import aboutTeam from '../assets/photos/about-team.jpg'; // 6195125
 import residential from '../assets/photos/service-residential-cleaning.jpg'; // 6197116
 import office from '../assets/photos/service-office-cleaning.jpg'; // 10567271
@@ -30,7 +29,6 @@ export const photos = {
   'scene-bath': { src: sceneBath, alt: 'A luxury bathroom with twin basins on a wooden vanity, a freestanding tub and neutral stone finishes' },
   'scene-light': { src: sceneLight, alt: 'Afternoon sunlight casting window-pane shadows across a clean cream wall' },
   'detail-sink': { src: detailSink, alt: 'Hands rinsing a white plate at a spotless marble countertop sink' },
-  'hero-kitchen-counter': { src: heroCounter, alt: 'A cleaner wearing pink rubber gloves wiping a white kitchen shelf with a cloth and spray bottle' },
   'about-team': { src: aboutTeam, alt: 'Three cleaners in red uniforms standing with a vacuum, mop and equipment in a bright modern living room' },
   'service-residential-cleaning': { src: residential, alt: 'A cleaner in a red uniform mopping the floor of a modern open-plan home while a colleague cleans the window' },
   'service-office-cleaning': { src: office, alt: 'A person wiping a wooden office desk with a cloth and a bottle of multi-purpose cleaner' },

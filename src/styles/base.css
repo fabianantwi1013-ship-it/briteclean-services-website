@@ -73,7 +73,7 @@ h4 {
 p { margin: 0 0 1em; text-wrap: pretty; }
 p:last-child { margin-bottom: 0; }
 
-em, .serif-italic { font-style: italic; }
+em { font-style: italic; }
 .display-italic { font-family: var(--font-display); font-style: italic; letter-spacing: -.01em; }
 
 .lead {
@@ -102,7 +102,6 @@ em, .serif-italic { font-style: italic; }
 	background: currentColor;
 	opacity: .7;
 }
-.eyebrow--plain::before { display: none; }
 
 .on-ink .eyebrow, .eyebrow--on-ink { color: var(--mint); }
 
@@ -124,12 +123,9 @@ em, .serif-italic { font-style: italic; }
 	margin-inline: auto;
 	padding-inline: var(--gutter);
 }
-.container--narrow { max-width: 980px; }
 
 .section { padding-block: var(--section); position: relative; }
-.section--tight { padding-block: calc(var(--section) * .6); }
 .section--paper { background: var(--paper); }
-.section--mist { background: var(--mist); }
 
 .on-ink {
 	background: var(--ink);
@@ -148,17 +144,8 @@ em, .serif-italic { font-style: italic; }
 	.section-head--split { grid-template-columns: 1.3fr 1fr; gap: 64px; }
 	.section-head--split .lead { justify-self: end; }
 }
-.section-head--center { justify-items: center; text-align: center; }
-.section-head--center .eyebrow::after {
-	content: "";
-	width: 28px;
-	height: 1px;
-	background: currentColor;
-	opacity: .7;
-}
 
 .muted { color: var(--muted); }
-.hairline { height: 1px; background: var(--line); border: 0; margin: 0; }
 
 /* Film grain for the dark, cinematic surfaces only — never on the white ones. */
 .grain { position: relative; isolation: isolate; }
@@ -272,11 +259,9 @@ em, .serif-italic { font-style: italic; }
 	transition: transform .5s var(--ease-out);
 }
 .btn:hover .btn__icon { transform: translateX(3px) rotate(-45deg); }
-.btn__icon--static { transform: none !important; }
 
 .btn--accent { --btn-bg: var(--rose); --btn-fg: var(--ink); --btn-fill: var(--white); --btn-fill-fg: var(--ink); }
 .btn--mint { --btn-bg: var(--mint); --btn-fg: var(--ink); --btn-fill: var(--white); --btn-fill-fg: var(--ink); }
-.btn--white { --btn-bg: var(--white); --btn-fg: var(--ink); --btn-fill: var(--rose); --btn-fill-fg: var(--ink); }
 .btn--ink { --btn-bg: var(--ink); --btn-fg: var(--white); --btn-fill: var(--blue); --btn-fill-fg: var(--white); }
 
 .btn--ghost {
