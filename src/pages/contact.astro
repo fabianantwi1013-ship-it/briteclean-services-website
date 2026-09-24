@@ -2,129 +2,107 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import Icon from '../components/Icon.astro';
-import ServiceArea from '../components/ServiceArea.astro';
 import { business, phoneDigits, whatsappUrl, addressLine } from '../data/site.js';
 
 const mapQuery = `${business.street}, ${business.city}, ${business.stateShort} ${business.postal}`;
-// Google's keyless embed — no API key, no billing account, no third-party script.
-const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
 const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapQuery)}`;
 const tel = (p) => `tel:+${phoneDigits(p)}`;
 ---
 
 <Layout
   title="Contact Us"
-  description={`Call or WhatsApp ${business.phonePrimary}. ${business.name} is based at ${addressLine()}.`}
+  description={`Call or WhatsApp ${business.phonePrimary}. ${business.name}, ${addressLine()}.`}
 >
-  <PageHead title="Contact" eyebrow="Talk to us" subtitle="Call, message, or send us a note — whichever suits you." photo="scene-bath" compact />
+  <PageHead title="Contact Us" subtitle="Call, WhatsApp or send a message." photo="scene-bath" />
 
-  <section class="section contact">
-    <div class="container">
-      <ul class="channels">
-        <li class="channel channel--primary" data-reveal>
-          <span class="channel__icon" aria-hidden="true"><Icon name="phone" size={22} /></span>
-          <p class="index">Call or WhatsApp</p>
-          <a class="channel__value" href={tel(business.phonePrimary)}>{business.phonePrimary}</a>
-          <a class="channel__value channel__value--sub" href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a>
-        </li>
-        <li class="channel" data-reveal>
-          <span class="channel__icon" aria-hidden="true"><Icon name="whatsapp" size={22} /></span>
-          <p class="index">WhatsApp</p>
-          <a class="channel__value" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
-          <p class="channel__note">The fastest way to reach us.</p>
-        </li>
-        <li class="channel" data-reveal>
-          <span class="channel__icon" aria-hidden="true"><Icon name="mail" size={22} /></span>
-          <p class="index">Email</p>
-          <a class="channel__value channel__value--email" href={`mailto:${business.email}`}>{business.email}</a>
-        </li>
-        <li class="channel" data-reveal>
-          <span class="channel__icon" aria-hidden="true"><Icon name="pin" size={22} /></span>
-          <p class="index">Address</p>
-          <address class="channel__value channel__value--text">{business.street}<br />{business.city}, {business.state} {business.postal}</address>
-          <a class="link-line channel__link" href={directions} target="_blank" rel="noopener noreferrer">Get directions <Icon name="arrowUpRight" size={14} /></a>
-        </li>
-      </ul>
-
-      <div class="contact__grid">
-        <div class="contact__form-col">
-          <p class="eyebrow">Send a message</p>
-          <h2 data-split>Drop us a <em>line</em></h2>
-          <p class="muted">For a full booking, use the Book Now form — it captures everything we need in one go.</p>
-
-          <div class="bc-alert bc-alert--success" role="status" id="bc-contact-success" hidden>
-            <strong>Message sent.</strong>
-            <p>Thanks for getting in touch — we will reply as soon as we can.</p>
-          </div>
-
-          <div class="bc-alert bc-alert--error" role="alert" id="bc-contact-error" hidden></div>
-
-          <form class="bc-form bc-form--contact" id="bc-contact-form" method="POST" action="/api/contact">
-            <div class="bc-hp" aria-hidden="true">
-              <label for="bc-contact-website">Leave this field empty</label>
-              <input type="text" id="bc-contact-website" name="website" value="" tabindex="-1" autocomplete="off" />
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__info" data-reveal>
+        <ul class="contact__list">
+          <li>
+            <span class="contact__icon" aria-hidden="true"><Icon name="phone" size={18} /></span>
+            <div>
+              <p class="contact__label">Phone or WhatsApp</p>
+              <a href={tel(business.phonePrimary)}>{business.phonePrimary}</a><br />
+              <a href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a>
             </div>
-
-            <div class="bc-form__row">
-              <div class="bc-field">
-                <label class="bc-label" for="bc-contact-name">
-                  Your name <span class="bc-req" aria-hidden="true">*</span>
-                  <span class="sr-only">(required)</span>
-                </label>
-                <input class="bc-input" type="text" id="bc-contact-name" name="name" autocomplete="name" maxlength="120" required />
-              </div>
-
-              <div class="bc-field">
-                <label class="bc-label" for="bc-contact-email">
-                  Email address <span class="bc-req" aria-hidden="true">*</span>
-                  <span class="sr-only">(required)</span>
-                </label>
-                <input class="bc-input" type="email" id="bc-contact-email" name="email" autocomplete="email" maxlength="190" required />
-              </div>
+          </li>
+          <li>
+            <span class="contact__icon" aria-hidden="true"><Icon name="mail" size={18} /></span>
+            <div>
+              <p class="contact__label">Email</p>
+              <a href={`mailto:${business.email}`}>{business.email}</a>
             </div>
-
-            <div class="bc-field">
-              <label class="bc-label" for="bc-contact-phone">Phone (optional)</label>
-              <input class="bc-input" type="tel" id="bc-contact-phone" name="phone" autocomplete="tel" maxlength="40" />
+          </li>
+          <li>
+            <span class="contact__icon" aria-hidden="true"><Icon name="pin" size={18} /></span>
+            <div>
+              <p class="contact__label">Address</p>
+              <address>{business.street}<br />{business.city}, {business.state} {business.postal}</address>
+              <a class="link-arrow" href={directions} target="_blank" rel="noopener noreferrer">Get directions</a>
             </div>
-
-            <div class="bc-field">
-              <label class="bc-label" for="bc-contact-message">
-                Message <span class="bc-req" aria-hidden="true">*</span>
-                <span class="sr-only">(required)</span>
-              </label>
-              <textarea class="bc-input" id="bc-contact-message" name="message" rows="5" maxlength="2000" required></textarea>
+          </li>
+          <li>
+            <span class="contact__icon" aria-hidden="true"><Icon name="clock" size={18} /></span>
+            <div>
+              <p class="contact__label">Hours</p>
+              <dl class="contact__hours">
+                {business.hours.map((h) => (
+                  <div><dt>{h.days}</dt><dd>{h.time}</dd></div>
+                ))}
+              </dl>
             </div>
+          </li>
+        </ul>
+        <a class="btn btn--whatsapp" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
+          <Icon name="whatsapp" size={18} /> Message on WhatsApp
+        </a>
+        <p class="contact__area"><strong>Areas we serve:</strong> {business.serviceArea}</p>
+      </div>
 
-            <button type="submit" class="btn btn--ink btn--lg btn--block">Send Message</button>
-          </form>
+      <div class="contact__form" data-reveal>
+        <h2>Send a Message</h2>
+
+        <div class="bc-alert bc-alert--success" role="status" id="bc-contact-success" hidden>
+          <strong>Message sent.</strong>
+          <p>Thanks for getting in touch. We will reply soon.</p>
         </div>
 
-        <div class="contact__side">
-          <div class="map-frame reveal-frame" data-reveal-img>
-            <iframe
-              src={mapSrc}
-              title={`Map showing ${mapQuery}`}
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              allowfullscreen
-            ></iframe>
+        <div class="bc-alert bc-alert--error" role="alert" id="bc-contact-error" hidden></div>
+
+        <form class="bc-form bc-form--contact" id="bc-contact-form" method="POST" action="/api/contact">
+          <div class="bc-hp" aria-hidden="true">
+            <label for="bc-contact-website">Leave this field empty</label>
+            <input type="text" id="bc-contact-website" name="website" value="" tabindex="-1" autocomplete="off" />
           </div>
 
-          <div class="hours-card">
-            <p class="index">Opening hours</p>
-            <dl>
-              {business.hours.map((h) => (
-                <div><dt>{h.days}</dt><dd>{h.time}</dd></div>
-              ))}
-            </dl>
+          <div class="bc-form__row">
+            <div class="bc-field">
+              <label class="bc-label" for="bc-contact-name">Name <span class="bc-req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+              <input class="bc-input" type="text" id="bc-contact-name" name="name" autocomplete="name" maxlength="120" required />
+            </div>
+            <div class="bc-field">
+              <label class="bc-label" for="bc-contact-email">Email <span class="bc-req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+              <input class="bc-input" type="email" id="bc-contact-email" name="email" autocomplete="email" maxlength="190" required />
+            </div>
           </div>
-        </div>
+
+          <div class="bc-field">
+            <label class="bc-label" for="bc-contact-phone">Phone (optional)</label>
+            <input class="bc-input" type="tel" id="bc-contact-phone" name="phone" autocomplete="tel" maxlength="40" />
+          </div>
+
+          <div class="bc-field">
+            <label class="bc-label" for="bc-contact-message">Message <span class="bc-req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+            <textarea class="bc-input" id="bc-contact-message" name="message" rows="5" maxlength="2000" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--lg btn--block">Send Message</button>
+        </form>
+        <p class="contact__note">Want to book? Use our <a href="/book-now">booking form</a>.</p>
       </div>
     </div>
   </section>
-
-  <ServiceArea />
 </Layout>
 
 <script>
@@ -154,10 +132,10 @@ const tel = (p) => `tel:+${phoneDigits(p)}`;
         ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
-      bad.textContent = result.message || 'Please fill in your name, a valid email address and a message.';
+      bad.textContent = result.message || 'Please enter your name, a valid email and a message.';
       bad.hidden = false;
     } catch {
-      bad.textContent = 'We could not send that — please check your connection, or call us instead.';
+      bad.textContent = 'We could not send that. Please check your connection, or call us.';
       bad.hidden = false;
     } finally {
       button.disabled = false;

@@ -12,11 +12,11 @@ interface Props {
 const { context = 'page' } = Astro.props;
 
 const steps = [
-  { id: 'services', title: 'Select Services', intro: 'Choose everything you need — you can pick more than one.' },
-  { id: 'property', title: 'Property Details', intro: 'This helps us size the job and quote accurately.' },
-  { id: 'schedule', title: 'Preferred Date & Time', intro: 'Tell us when suits you. We will confirm the exact time with you directly.' },
-  { id: 'contact', title: 'Your Details', intro: 'So we can reach you to confirm.' },
-  { id: 'review', title: 'Review & Submit', intro: 'Check everything over, then send your request.' },
+  { id: 'services', title: 'Select Services', intro: 'Pick one or more.' },
+  { id: 'property', title: 'Property Details', intro: 'Helps us quote accurately.' },
+  { id: 'schedule', title: 'Preferred Date & Time', intro: 'We will confirm the exact time with you.' },
+  { id: 'contact', title: 'Your Details', intro: 'So we can confirm your booking.' },
+  { id: 'review', title: 'Review & Submit', intro: 'Check your details, then send.' },
 ];
 
 const today = new Date().toISOString().slice(0, 10);
@@ -29,12 +29,12 @@ const today = new Date().toISOString().slice(0, 10);
   </div>
 
   <div class="bc-alert bc-alert--success" role="status" tabindex="-1" id="bc-booking-confirmation" hidden>
-    <h3>Thank you — your request is in.</h3>
-    <p>We have received your booking request and sent a confirmation to your email address. A member of the team will be in touch shortly to confirm the details and timing.</p>
-    <p>Need it sooner? Call or message us and we will get straight onto it.</p>
+    <h3>Thank you. Your request is in.</h3>
+    <p>We have emailed you a confirmation and will be in touch shortly to confirm the details.</p>
+    <p>Need it sooner? Call or WhatsApp us.</p>
     <div class="btn-row" style="margin-top:24px">
-      <a class="btn btn--ink" href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
-      <a class="btn btn--mint" href={whatsappUrl()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={18} /> Message on WhatsApp</a>
+      <a class="btn" href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
+      <a class="btn btn--whatsapp" href={whatsappUrl()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={18} /> Message on WhatsApp</a>
     </div>
   </div>
 
@@ -64,7 +64,7 @@ const today = new Date().toISOString().slice(0, 10);
 
     <p class="bc-step-counter" role="status" aria-live="polite"></p>
 
-    {/* Step 1 — services */}
+    {/* Step 1: services */}
     <fieldset class="bc-step" data-step="1">
       <legend class="bc-step__legend">
         <span class="bc-step__num">1</span>
@@ -99,7 +99,7 @@ const today = new Date().toISOString().slice(0, 10);
       </div>
     </fieldset>
 
-    {/* Step 2 — property */}
+    {/* Step 2: property */}
     <fieldset class="bc-step" data-step="2">
       <legend class="bc-step__legend">
         <span class="bc-step__num">2</span>
@@ -133,9 +133,8 @@ const today = new Date().toISOString().slice(0, 10);
       </div>
 
       <div class="bc-field" data-field="bedrooms">
-        <label class="bc-label" for="bc-field-bedrooms">Bedrooms / rooms</label>
-        <p class="bc-help" id="bc-field-bedrooms-help">For offices and commercial spaces, count the rooms or work areas.</p>
-        <select class="bc-input bc-select" id="bc-field-bedrooms" name="bedrooms" aria-describedby="bc-field-bedrooms-help">
+        <label class="bc-label" for="bc-field-bedrooms">Rooms</label>
+        <select class="bc-input bc-select" id="bc-field-bedrooms" name="bedrooms">
           <option value="">Please choose…</option>
           {roomOptions.map((o) => <option value={o}>{o}</option>)}
         </select>
@@ -171,13 +170,13 @@ const today = new Date().toISOString().slice(0, 10);
 
       <div class="bc-field" data-field="instructions">
         <label class="bc-label" for="bc-field-instructions">Special instructions</label>
-        <p class="bc-help" id="bc-field-instructions-help">Pets, allergies, access or parking notes, anything needing particular care.</p>
+        <p class="bc-help" id="bc-field-instructions-help">Pets, allergies, access or parking.</p>
         <textarea class="bc-input" id="bc-field-instructions" name="instructions" rows="4" maxlength="2000" aria-describedby="bc-field-instructions-help"></textarea>
         <p class="bc-error" id="bc-field-instructions-error" hidden></p>
       </div>
     </fieldset>
 
-    {/* Step 3 — schedule */}
+    {/* Step 3: schedule */}
     <fieldset class="bc-step" data-step="3">
       <legend class="bc-step__legend">
         <span class="bc-step__num">3</span>
@@ -192,8 +191,7 @@ const today = new Date().toISOString().slice(0, 10);
           Preferred date <span class="bc-req" aria-hidden="true">*</span>
           <span class="screen-reader-text">(required)</span>
         </label>
-        <p class="bc-help" id="bc-field-preferredDate-help">A preference, not a confirmed slot — we will call to agree the exact time.</p>
-        <input class="bc-input" type="date" id="bc-field-preferredDate" name="preferredDate" min={today} required aria-describedby="bc-field-preferredDate-help bc-field-preferredDate-error" />
+        <input class="bc-input" type="date" id="bc-field-preferredDate" name="preferredDate" min={today} required aria-describedby="bc-field-preferredDate-error" />
         <p class="bc-error" id="bc-field-preferredDate-error" hidden></p>
       </div>
 
@@ -221,14 +219,13 @@ const today = new Date().toISOString().slice(0, 10);
       </div>
 
       <div class="bc-field" data-field="alternateDate">
-        <label class="bc-label" for="bc-field-alternateDate">Backup date</label>
-        <p class="bc-help" id="bc-field-alternateDate-help">Optional. Gives us a second option if your first choice is full.</p>
-        <input class="bc-input" type="date" id="bc-field-alternateDate" name="alternateDate" min={today} aria-describedby="bc-field-alternateDate-help" />
+        <label class="bc-label" for="bc-field-alternateDate">Backup date (optional)</label>
+        <input class="bc-input" type="date" id="bc-field-alternateDate" name="alternateDate" min={today} />
         <p class="bc-error" id="bc-field-alternateDate-error" hidden></p>
       </div>
     </fieldset>
 
-    {/* Step 4 — contact */}
+    {/* Step 4: contact */}
     <fieldset class="bc-step" data-step="4">
       <legend class="bc-step__legend">
         <span class="bc-step__num">4</span>
@@ -252,8 +249,7 @@ const today = new Date().toISOString().slice(0, 10);
           Phone number <span class="bc-req" aria-hidden="true">*</span>
           <span class="screen-reader-text">(required)</span>
         </label>
-        <p class="bc-help" id="bc-field-phone-help">The fastest way for us to confirm your booking.</p>
-        <input class="bc-input" type="tel" id="bc-field-phone" name="phone" autocomplete="tel" maxlength="40" required aria-describedby="bc-field-phone-help bc-field-phone-error" />
+        <input class="bc-input" type="tel" id="bc-field-phone" name="phone" autocomplete="tel" maxlength="40" required aria-describedby="bc-field-phone-error" />
         <p class="bc-error" id="bc-field-phone-error" hidden></p>
       </div>
 
@@ -271,7 +267,7 @@ const today = new Date().toISOString().slice(0, 10);
           Service address <span class="bc-req" aria-hidden="true">*</span>
           <span class="screen-reader-text">(required)</span>
         </label>
-        <p class="bc-help" id="bc-field-address-help">Where the cleaning takes place, including ZIP code.</p>
+        <p class="bc-help" id="bc-field-address-help">Include your ZIP code.</p>
         <textarea class="bc-input" id="bc-field-address" name="address" rows="3" maxlength="400" autocomplete="street-address" required aria-describedby="bc-field-address-help bc-field-address-error"></textarea>
         <p class="bc-error" id="bc-field-address-error" hidden></p>
       </div>
@@ -297,7 +293,7 @@ const today = new Date().toISOString().slice(0, 10);
       </div>
     </fieldset>
 
-    {/* Step 5 — review */}
+    {/* Step 5: review */}
     <fieldset class="bc-step" data-step="5">
       <legend class="bc-step__legend">
         <span class="bc-step__num">5</span>
@@ -308,23 +304,21 @@ const today = new Date().toISOString().slice(0, 10);
       </legend>
 
       <div class="bc-review" data-bc-review>
-        <p class="bc-review__fallback">Please scroll up and check your answers, then send your request below.</p>
+        <p class="bc-review__fallback">Check your answers above, then send.</p>
       </div>
 
       <div class="bc-consent">
-        <p>We use the details above only to contact you about this booking. We never sell or share your information.</p>
+        <p>We only use your details to contact you about this booking.</p>
       </div>
     </fieldset>
 
     <div class="bc-form__nav">
-      <button type="button" class="btn btn--ghost bc-form__back" hidden>Back</button>
-      <button type="button" class="btn btn--ink bc-form__next" hidden>Continue</button>
+      <button type="button" class="btn btn--outline bc-form__back" hidden>Back</button>
+      <button type="button" class="btn bc-form__next" hidden>Continue</button>
       <button type="submit" class="btn btn--lg bc-form__submit">Send My Booking Request</button>
     </div>
 
-    <p class="bc-form__note">
-      No payment is taken now. We review every request and confirm the details with you personally before anything is scheduled.
-    </p>
+    <p class="bc-form__note">No payment now. We confirm every booking with you first.</p>
   </form>
 </div>
 

@@ -1,38 +1,35 @@
-# Briteclean Services LLC — Website
+# Briteclean Services LLC: Website
 
-Live at **https://britecleanservices.com** — an Astro static site on Vercel. Booking and
+Live at **https://britecleanservices.com**. An Astro static site on Vercel; booking and
 contact requests are emailed through Resend by the functions in `api/`.
 
 ## The site
 
 ```
 src/
-├── data/site.js        ← every piece of copy: business details, services, FAQs, reviews
-├── data/photos.js      ← photo registry (Pexels placeholders — replace with real photos)
+├── data/site.js        ← all copy: business details, services, FAQs
+├── data/photos.js      ← photo registry (Pexels placeholders, replace with real photos)
 ├── assets/photos/      ← source photos; Astro builds AVIF/WebP sizes from these
-├── components/         ← one file per section (Hero, ServicesRail, Process, …)
+├── components/         ← one file per section
 ├── pages/              ← index, services, about, faq, contact, book-now, 404
 ├── scripts/
-│   ├── booking-form.js ← multi-step form (field names are a contract with api/)
-│   └── motion/         ← intro, hero slideshow, scroll reveals, smooth scroll
-└── styles/             ← tokens → base → chrome → sections → form → motion
+│   ├── site.js         ← header, menu, hero slideshow, fade-ins (no libraries)
+│   └── booking-form.js ← multi-step form (field names are a contract with api/)
+└── styles/             ← tokens, base, layout, form
 api/                    ← Vercel functions: booking.js, contact.js, _lib/
 ```
 
-**Design system.** Deep navy base, cobalt blue for action, light red and light green as
-accents, white canvas; Instrument Serif for display, Manrope for text. Every colour
-pairing and its WCAG contrast ratio is listed at the top of `src/styles/tokens.css` —
+**Design.** Navy, blue, light red, light green and white, set in Montserrat. Every colour
+pairing and its WCAG contrast ratio is listed at the top of `src/styles/tokens.css`;
 light red and light green only ever carry navy text.
 
-**Motion.** GSAP (ScrollTrigger, SplitText) with Lenis smooth scrolling: a title
-sequence on the first homepage visit of a session, a wiping hero slideshow, headings that
-rise line by line, a pinned horizontal services strip, and cross-page transitions via the
-View Transitions API. Visitors who ask for reduced motion get a still, fully working site;
-if the motion script ever fails to load, a timer reveals everything anyway.
+**Speed.** No animation or scrolling libraries. Scrolling is the browser's own, the only
+motion is a crossfading hero and a short fade as sections come into view, and visitors
+who ask for reduced motion get none of it.
 
 **Editing.** Copy changes go in `src/data/site.js`. To replace a photo, drop a new file
 into `src/assets/photos/` with the same name and update its alt text in
-`src/data/photos.js`.
+`src/data/photos.js`. Customer reviews can be added to `testimonials` in `site.js`.
 
 ```bash
 npm install
@@ -61,7 +58,7 @@ cleaning website/
 ```
 
 These two folders symlink into a LocalWP site's `wp-content/`. WordPress core is never
-copied into this project — only the code that is actually ours.
+copied into this project, only the code that is actually ours.
 
 ## Verification status
 
@@ -85,7 +82,7 @@ Verified on **2026-09-22** against real WordPress 7.1.1, ACF 6.8.10 and WooComme
 | PHP warnings / notices / deprecations / 5xx | ✅ none |
 | Mobile at 375px | ✅ pass |
 
-Three bugs were found and fixed by that first run — a fatal error from a wrong filter
+Three bugs were found and fixed by that first run, a fatal error from a wrong filter
 hook, opening hours silently missing from the schema because a regex lacked `/u`, and
 an unreadable hero headline at 2.96:1 contrast. See commit `2744d69`.
 
@@ -102,11 +99,11 @@ for the client to renew and no plugin update that can change the markup undernea
 **Services are WooCommerce products.** WooCommerce was a requirement, and making it the
 source of truth for the eight services means one place to edit them rather than a
 product catalogue and a separate service list drifting apart. Checkout is fully
-disabled — see below.
+disabled, see below.
 
 **Global settings live in the Customizer, not ACF.** ACF's free tier has no Options
-Page (it is Pro-only), so site-wide values — phone numbers, address, hours, trust
-badges — use the Customizer, which is native, free, and gives live preview. ACF free
+Page (it is Pro-only), so site-wide values, phone numbers, address, hours, trust
+badges, use the Customizer, which is native, free, and gives live preview. ACF free
 handles page-specific content: the hero, page subtitles, testimonial details, service
 icons.
 
@@ -131,7 +128,7 @@ still empty renders a branded SVG placeholder rather than a broken frame. See
 | `inc/cpt.php` | The testimonial post type. |
 | `inc/acf-fields.php` | ACF field groups, registered in code so they are version-controlled. |
 | `inc/schema.php` | LocalBusiness + WebSite JSON-LD. |
-| `inc/woocommerce.php` | Catalog-only mode — see below. |
+| `inc/woocommerce.php` | Catalog-only mode, see below. |
 | `inc/seeder.php` | Tools → Briteclean Setup. Creates pages, products, testimonials, menus, and imports the placeholder photos. |
 | `assets/img/placeholders/` | Ten Pexels-licensed photos (832 KB) with a `credits.json` manifest. |
 | `template-parts/` | Homepage sections, each reusable on other pages. |
@@ -158,7 +155,7 @@ in `inc/woocommerce.php` and re-run Woo's payment setup.
 
 `BC_Schema` is the single source of truth for every booking field. The form markup,
 server-side validation, the admin meta box, both emails and the CSV export all read
-from it — add a field there and it appears everywhere, correctly, at once.
+from it, add a field there and it appears everywhere, correctly, at once.
 
 | Class | Responsibility |
 | --- | --- |
@@ -183,10 +180,10 @@ nobody retypes anything.
 **Progressive enhancement:** every step is a real `<fieldset>`, visible by default. The
 JavaScript adds an `is-enhanced` class, which is what the CSS keys the stepper off. If
 the script fails to load, the visitor gets one long form that still submits and is
-still validated. Client-side validation is for faster feedback only — every rule runs
+still validated. Client-side validation is for faster feedback only, every rule runs
 again in PHP.
 
-**Spam protection:** two layers ship enabled — a honeypot field, and a signed render
+**Spam protection:** two layers ship enabled, a honeypot field, and a signed render
 timestamp rejecting submissions that arrive impossibly fast or from a stale form. Plus
 a 5-per-hour-per-IP rate limit. `BC_Handler::check_spam()` documents exactly where and
 how to add reCAPTCHA or Turnstile as a third layer if those prove insufficient.

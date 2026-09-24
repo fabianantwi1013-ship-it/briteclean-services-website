@@ -1,5 +1,5 @@
 /**
- * Contact form handler — a short message, emailed to the business.
+ * Contact form handler: a short message, emailed to the business.
  *
  * Deliberately minimal. Anything that is actually a booking belongs in the booking
  * form, which is why this one links across to it.
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   }
   if (!raw || typeof raw !== 'object') raw = {};
 
-  // Honeypot — pretend it worked rather than telling a bot it was caught.
+  // Honeypot: pretend it worked rather than telling a bot it was caught.
   if (raw.website) return res.status(200).json({ ok: true });
 
   const name = sanitizeText(raw.name, 120);

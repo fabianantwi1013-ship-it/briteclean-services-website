@@ -1,43 +1,21 @@
 ---
-/**
- * Cinematic page header for every inner page: a full-bleed photograph that settles
- * from blur to sharp, with the title rising line by line.
- */
 import Img from './Img.astro';
-import { business } from '../data/site.js';
 
 interface Props {
   title: string;
   subtitle?: string;
-  eyebrow?: string;
   photo?: string;
   position?: string;
-  compact?: boolean;
 }
-const { title, subtitle, eyebrow, photo = 'scene-loft', position, compact = false } = Astro.props;
+const { title, subtitle, photo = 'scene-loft', position } = Astro.props;
 ---
 
-<section class={`page-head on-ink${compact ? ' page-head--compact' : ''}`} data-page-head>
-  <div class="page-head__media" data-page-head-media>
-    <Img photo={photo} eager sizes="100vw" widths={[768, 1280, 1920, 2400]} position={position} alt="" />
+<section class="page-head">
+  <div class="page-head__media" aria-hidden="true">
+    <Img photo={photo} alt="" eager sizes="100vw" widths={[640, 960, 1280, 1920]} position={position} />
   </div>
-  <div class="page-head__scrim" aria-hidden="true"></div>
-  <div class="grain page-head__grain" aria-hidden="true"></div>
-
   <div class="container page-head__inner">
-    <nav class="breadcrumbs" aria-label="Breadcrumb" data-hero-item>
-      <ol>
-        <li><a href="/">Home</a></li>
-        <li aria-current="page">{title}</li>
-      </ol>
-    </nav>
-    {eyebrow && <p class="eyebrow eyebrow--on-ink" data-hero-item>{eyebrow}</p>}
-    <h1 class="page-head__title" data-hero-title>{title}</h1>
-    {subtitle && <p class="page-head__sub" data-hero-item>{subtitle}</p>}
+    <h1>{title}</h1>
+    {subtitle && <p>{subtitle}</p>}
   </div>
-
-  <p class="page-head__meta container index" aria-hidden="true" data-hero-item>
-    <span>{business.name}</span>
-    <span>{business.city}, {business.state}</span>
-  </p>
 </section>

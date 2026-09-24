@@ -1,39 +1,19 @@
 ---
 import Icon from './Icon.astro';
-import Img from './Img.astro';
 import { valueProps, business } from '../data/site.js';
 ---
 
-<section class="why section on-ink grain" id="why-us">
-  <div class="container why__grid">
-    <div class="why__media">
-      <div class="why__arch reveal-frame" data-reveal-img>
-        <div class="parallax" data-parallax="10">
-          <Img photo="detail-sink" sizes="(min-width: 900px) 36vw, 90vw" widths={[480, 800, 1200]} />
-        </div>
-      </div>
-      <p class="why__caption">
-        <span class="index">Based in {business.city}, {business.stateShort}</span>
-        <span class="display-italic">{business.taglineSecondary}</span>
-      </p>
-    </div>
-
-    <div class="why__copy">
-      <p class="eyebrow eyebrow--on-ink">The difference</p>
-      <h2 data-split>Why Choose {business.name}?</h2>
-
-      <ul class="why__list">
-        {valueProps.map((prop, i) => (
-          <li class="why__item" data-reveal>
-            <span class="why__icon" aria-hidden="true"><Icon name={prop.icon} size={22} /></span>
-            <div>
-              <h3>{prop.title}</h3>
-              <p>{prop.text}</p>
-            </div>
-            <span class="index why__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+<section class="section section--ink" id="why-us">
+  <div class="container">
+    <h2 class="section-title">Why Choose {business.name}?</h2>
+    <ul class="values" data-reveal>
+      {valueProps.map((prop) => (
+        <li class="value">
+          <span class="value__icon" aria-hidden="true"><Icon name={prop.icon} size={20} /></span>
+          <h3>{prop.title}</h3>
+          <p>{prop.text}</p>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>

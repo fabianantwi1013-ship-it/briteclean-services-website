@@ -4,7 +4,6 @@ import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
-import Intro from '../components/Intro.astro';
 import Schema from '../components/Schema.astro';
 import { business } from '../data/site.js';
 
@@ -15,19 +14,17 @@ interface Props {
   image?: string;
   /** Set on the homepage, where the title should not be suffixed. */
   bare?: boolean;
-  /** Play the cinematic intro (homepage only, once per browser session). */
-  intro?: boolean;
 }
 
-const { title, description, image = '/img/og.jpg', bare = false, intro = false } = Astro.props;
+const { title, description, image = '/img/og.jpg', bare = false } = Astro.props;
 
-const fullTitle = bare ? title : `${title} – ${business.name}`;
+const fullTitle = bare ? title : `${title} | ${business.name}`;
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
 const ogImage = new URL(image, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en" data-has-intro={intro ? '1' : undefined}>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -36,45 +33,6 @@ const ogImage = new URL(image, Astro.site).href;
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#0A1830" />
 
-    {/*
-      Runs before first paint. Sets the flags the CSS keys motion off:
-        js       — scripts are running
-        motion   — the visitor has not asked for reduced motion
-        intro-on — show the intro curtain (homepage, first view this session)
-      If the motion bundle has not reported in within 3.5s of visible time (slow
-      network, blocked script), `motion-off` reveals everything so no content is ever
-      stuck hidden.
-    */}
-    <script is:inline>
-      (function () {
-        var d = document.documentElement;
-        d.classList.add('js');
-        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!reduce) d.classList.add('motion');
-        try {
-          if (d.getAttribute('data-has-intro') === '1' && !reduce && !sessionStorage.getItem('bc-intro-seen')) {
-            d.classList.add('intro-on');
-          }
-        } catch (e) {}
-        // The clock only runs while the tab is visible: a page opened in a background
-        // tab should still get its full entrance when the visitor switches to it.
-        var arm = function () {
-          setTimeout(function () {
-            if (window.__bcMotionReady) return;
-            if (document.hidden) {
-              document.addEventListener('visibilitychange', arm, { once: true });
-              return;
-            }
-            d.classList.add('motion-off');
-            d.classList.remove('intro-on');
-          }, 3500);
-        };
-        arm();
-      })();
-    </script>
-
-    {/* Fonts are configured in astro.config.mjs; only the upright faces are preloaded. */}
-    <Font cssVariable="--font-serif-family" preload={[{ style: 'normal' }]} />
     <Font cssVariable="--font-sans-family" preload />
 
     <link rel="icon" type="image/png" href="/img/brand/site-icon.png" />
@@ -97,8 +55,6 @@ const ogImage = new URL(image, Astro.site).href;
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    {intro && <Intro />}
-
     <Header />
 
     <main id="main" tabindex="-1">
@@ -108,14 +64,8 @@ const ogImage = new URL(image, Astro.site).href;
     <Footer />
     <WhatsAppFloat />
 
-    <div class="cursor" aria-hidden="true"><span class="cursor__dot"><span class="cursor__label"></span></span></div>
-
     <script>
-      // The motion bundle (GSAP, ScrollTrigger, SplitText, Lenis) loads as its own chunk
-      // after the first frame has painted, so it never holds up the opening image.
-      const load = () => import('../scripts/motion/index.js');
-      if (document.hidden) load();
-      else requestAnimationFrame(() => setTimeout(load, 0));
+      import '../scripts/site.js';
     </script>
   </body>
 </html>

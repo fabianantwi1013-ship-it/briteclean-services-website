@@ -2,68 +2,37 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import Img from '../components/Img.astro';
-import Process from '../components/Process.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
-import Testimonials from '../components/Testimonials.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { business } from '../data/site.js';
 ---
 
 <Layout
   title="About Us"
-  description={`${business.name} is a cleaning company serving ${business.city}, ${business.state}. Background-checked staff, eco-friendly products and a written scope for every job.`}
+  description={`${business.name} is a cleaning company in ${business.city}, ${business.state}, serving homes, offices and commercial spaces.`}
 >
-  <PageHead
-    title="About"
-    eyebrow="Our story"
-    subtitle="A local cleaning company built on showing up."
-    photo="scene-light"
-    position="50% 40%"
-  />
+  <PageHead title="About Us" subtitle={business.tagline} photo="scene-light" position="50% 40%" />
 
-  <section class="section about">
-    <div class="container about__grid">
-      <div class="about__intro">
-        <p class="eyebrow">{business.tagline}</p>
-        <h2 class="about__title" data-split>A local cleaning company built on <em>showing up</em></h2>
+  <section class="section">
+    <div class="container split" data-reveal>
+      <div class="split__text">
+        <h2>{business.taglineSecondary}</h2>
+        <p>
+          {business.name} is a cleaning company based in {business.city}, {business.state}. We clean homes,
+          offices and commercial spaces across the area.
+        </p>
+        <p>
+          Our team is trained, background-checked and courteous. We use eco-friendly products, bring
+          everything we need, and work around your schedule.
+        </p>
+        <a class="btn" href="/book-now">Book a Cleaning</a>
       </div>
-
-      <div class="about__media">
-        <div class="reveal-frame about__frame" data-reveal-img>
-          <div class="parallax" data-parallax="10">
-            <Img photo="about-team" sizes="(min-width: 900px) 50vw, 92vw" widths={[640, 960, 1280, 1800]} />
-          </div>
-        </div>
-      </div>
-
-      <div class="about__story">
-        <p class="about__dropcap" data-reveal>
-          {business.name} is a cleaning company serving {business.city}, {business.state} and the surrounding
-          communities. We started with a simple observation: most people do not want to manage a cleaning
-          service. They want to agree a time, come home to a clean space, and not think about it again.
-        </p>
-        <p data-reveal>
-          So that is what we built. Background-checked staff who are trained the same way and turn up when
-          they said they would. Eco-friendly products that are safe around children and pets. A written scope
-          for every job, so nobody is guessing what "clean" means. And a real person on the other end of the
-          phone when something needs changing.
-        </p>
-        <p data-reveal>
-          We are not the biggest cleaning company in the area, and we are not trying to be.
-        </p>
-        <blockquote class="about__pull" data-reveal>
-          We would rather keep the customers we have by doing the work properly than grow past the point where we can.
-        </blockquote>
-        <p class="about__note" data-reveal>
-          <strong>Placeholder copy.</strong> Replace this with the real company story — edit
-          <code>src/pages/about.astro</code>.
-        </p>
+      <div class="split__media">
+        <Img photo="about-team" sizes="(min-width: 900px) 45vw, 92vw" widths={[640, 960, 1280]} />
       </div>
     </div>
   </section>
 
   <WhyChooseUs />
-  <Process />
-  <Testimonials />
   <CtaBand photo="scene-living" />
 </Layout>

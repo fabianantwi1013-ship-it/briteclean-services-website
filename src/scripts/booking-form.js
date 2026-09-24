@@ -20,7 +20,7 @@ const L10N = {
   none: 'Not provided',
   submitting: 'Sending…',
   submit: 'Send My Booking Request',
-  networkError: 'We could not send that — please check your connection and try again, or call us.',
+  networkError: 'We could not send that. Please check your connection and try again, or call us.',
 };
 
 export function initBookingForm() {
@@ -52,17 +52,10 @@ export function initBookingForm() {
   const prefersReducedMotion = () =>
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Scroll through the smooth-scroll controller when it is running, so the two do not
-  // fight over the scroll position; fall back to native scrolling otherwise.
-  // Focus is always moved with preventScroll first, so the position measured here is
-  // the real one and not a native focus jump the smooth scroller has not seen yet.
+  // Focus is moved with preventScroll, then the page scrolls once, to a position
+  // measured after the step has changed.
   function scrollToElement(el, offset) {
     const top = Math.max(0, el.getBoundingClientRect().top + window.pageYOffset + offset);
-    const lenis = window.__bcLenis;
-    if (lenis) {
-      lenis.scrollTo(top, { immediate: prefersReducedMotion() });
-      return;
-    }
     window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   }
 
@@ -268,7 +261,7 @@ export function initBookingForm() {
           const focusable = field.querySelector('input, select, textarea');
           if (focusable) focusable.focus();
         });
-        li.append(link, document.createTextNode(` — ${message}`));
+        li.append(link, document.createTextNode(`: ${message}`));
       } else {
         li.textContent = message;
       }
@@ -312,7 +305,7 @@ export function initBookingForm() {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    // Validate every step, not just the visible one — someone can reach the last
+    // Validate every step, not just the visible one: someone can reach the last
     // step, go back, clear a required field, and return.
     let allValid = true;
     let firstBadStep = -1;

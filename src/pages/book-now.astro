@@ -2,29 +2,18 @@
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import BookingSection from '../components/BookingSection.astro';
-import ServiceArea from '../components/ServiceArea.astro';
 ---
 
 <Layout
   title="Book a Cleaning"
-  description="Request a cleaning in five steps. No payment taken — we confirm every booking with you personally before anything is scheduled."
+  description="Request a cleaning in five quick steps. No payment online. We confirm every booking with you first."
 >
-  <PageHead
-    title="Book Now"
-    eyebrow="Five simple steps"
-    subtitle="Tell us what you need and when. We confirm every request personally."
-    photo="scene-living"
-    position="50% 45%"
-    compact
-  />
-
-  <BookingSection context="page" />
-
-  <ServiceArea />
+  <PageHead title="Book a Cleaning" subtitle="Five quick steps. No payment now." photo="scene-living" position="50% 45%" />
+  <BookingSection />
 </Layout>
 
 <script>
-  // Deep link from a service card: /book-now?service=deep-cleaning pre-ticks that box.
+  // Deep link from a service: /book-now?service=deep-cleaning pre-ticks that box.
   const slug = new URLSearchParams(window.location.search).get('service');
   if (slug) {
     const box = document.getElementById(`bc-services-${slug}`);

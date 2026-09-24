@@ -1,102 +1,57 @@
 ---
 /**
- * Full-screen cinematic slideshow.
- *
- * Without JavaScript this is a single still (the first slide) with the headline and
- * buttons. The script adds the wipe transitions, Ken Burns drift and controls. The
- * autoplay can always be paused (WCAG 2.2.2), stops when the hero is off screen or
- * the tab is hidden, and never starts under reduced motion.
+ * Homepage hero: a slow crossfade between four interiors, with the headline and two
+ * calls to action. The first photo is the only one loaded up front. The slideshow
+ * never autoplays for visitors who ask for reduced motion, and can always be paused.
  */
 import Icon from './Icon.astro';
 import Img from './Img.astro';
 import { hero, heroSlides, business, phoneDigits } from '../data/site.js';
 
-const total = String(heroSlides.length).padStart(2, '0');
-// The headline is split so the last phrase can be set in italic; the text itself is
-// unchanged: "Professional Cleaning Services for Your Space".
+// Same words as the brief, "Professional Cleaning Services for Your Space", with the
+// last phrase picked out in colour.
 const [lead, tail] = hero.headline.split(' for ');
 ---
 
-<section class="hero on-ink" data-hero aria-roledescription="carousel" aria-label="Spaces we clean">
-  <div class="hero__media" data-hero-media>
+<section class="hero" data-hero aria-label="Introduction">
+  <div class="hero__slides" aria-hidden="true">
     {heroSlides.map((slide, i) => (
-      <div
-        class={`hero__slide${i === 0 ? ' is-active' : ''}`}
-        data-slide
-        role="group"
-        aria-roledescription="slide"
-        aria-label={`${i + 1} of ${heroSlides.length}: ${slide.label}`}
-        aria-hidden={i === 0 ? undefined : 'true'}
-      >
-        <div class="hero__img" data-slide-img>
-          <Img
-            photo={slide.photo}
-            eager={i === 0}
-            sizes="100vw"
-            widths={[768, 1280, 1920, 2400]}
-            position={slide.position}
-          />
-        </div>
+      <div class={`hero__slide${i === 0 ? ' is-active' : ''}`} data-slide>
+        <Img
+          photo={slide.photo}
+          alt=""
+          eager={i === 0}
+          lowPriority={i > 0}
+          sizes="100vw"
+          widths={[640, 960, 1280, 1920]}
+          position={slide.position}
+        />
       </div>
     ))}
-    <span class="hero__edge" data-hero-edge aria-hidden="true"></span>
   </div>
+  <div class="hero__shade" aria-hidden="true"></div>
 
-  <div class="hero__scrim" aria-hidden="true"></div>
-  <div class="grain hero__grain" aria-hidden="true"></div>
-
-  <div class="container hero__content" data-hero-content>
-    <p class="hero__badge" data-hero-item>
-      <Icon name="sparkle" size={14} />
-      {hero.badge}
-    </p>
-
-    <h1 class="hero__title" data-hero-title>
-      {lead} <em>for {tail}</em>
-    </h1>
-
-    <div class="hero__foot">
-      <p class="hero__sub" data-hero-item>{hero.subheadline}</p>
-      <div class="btn-row" data-hero-item>
-        <a class="btn btn--accent btn--lg" href="/book-now" data-magnetic>
-          {hero.ctaPrimary}
-          <span class="btn__icon"><Icon name="arrow" size={16} /></span>
-        </a>
-        <a class="btn btn--ghost-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
-          <Icon name="phone" size={18} />
-          {hero.ctaSecondary}
-        </a>
-      </div>
+  <div class="container hero__content">
+    <p class="hero__badge"><Icon name="sparkle" size={14} /> {hero.badge}</p>
+    <h1 class="hero__title">{lead} <span>for {tail}</span></h1>
+    <p class="hero__sub">{hero.subheadline}</p>
+    <div class="btn-row">
+      <a class="btn btn--accent btn--lg" href="/book-now">{hero.ctaPrimary}</a>
+      <a class="btn btn--outline-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
+        <Icon name="phone" size={18} /> {hero.ctaSecondary}
+      </a>
     </div>
   </div>
 
-  <div class="container hero__bar" data-hero-item>
-    <p class="hero__caption" data-hero-caption>
-      <span class="index"><span data-hero-index>01</span> / {total}</span>
-      <span class="hero__caption-label" data-hero-label>{heroSlides[0].label}</span>
-    </p>
-
-    <div class="hero__controls" data-hero-controls>
-      <ol class="hero__dots">
-        {heroSlides.map((slide, i) => (
-          <li>
-            <button type="button" class="hero__dot" data-hero-dot={i} aria-label={`Show slide ${i + 1}: ${slide.label}`} aria-current={i === 0 ? 'true' : undefined}>
-              <span class="hero__dot-fill" data-hero-fill></span>
-            </button>
-          </li>
-        ))}
-      </ol>
-      <button type="button" class="hero__pause" data-hero-pause aria-label="Pause slideshow">
-        <span class="hero__pause-icon hero__pause-icon--pause"><Icon name="pause" size={14} /></span>
-        <span class="hero__pause-icon hero__pause-icon--play"><Icon name="play" size={12} /></span>
-      </button>
+  <div class="container hero__controls" data-hero-controls hidden>
+    <div class="hero__dots">
+      {heroSlides.map((_, i) => (
+        <button type="button" class="hero__dot" data-dot={i} aria-label={`Show photo ${i + 1}`} aria-pressed={i === 0 ? 'true' : 'false'}></button>
+      ))}
     </div>
-
-    <a class="hero__scroll" href="#story">
-      <span>Scroll</span>
-      <span class="hero__scroll-line" aria-hidden="true"></span>
-    </a>
+    <button type="button" class="hero__pause" data-pause aria-label="Pause slideshow">
+      <span class="hero__pause-icon"><Icon name="pause" size={14} /></span>
+      <span class="hero__play-icon"><Icon name="play" size={12} /></span>
+    </button>
   </div>
-
-  <p class="hero__coords" aria-hidden="true">39.33° N &nbsp;·&nbsp; 84.41° W &nbsp;—&nbsp; {business.city}, {business.state}</p>
 </section>

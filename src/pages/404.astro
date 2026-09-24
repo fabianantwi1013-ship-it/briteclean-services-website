@@ -1,22 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Icon from '../components/Icon.astro';
-import ServicesGrid from '../components/ServicesGrid.astro';
+import PageHead from '../components/PageHead.astro';
 ---
 
 <Layout title="Page Not Found" description="That page has moved or never existed.">
-  <section class="lost on-ink grain" data-page-head>
-    <p class="lost__code" aria-hidden="true">404</p>
-    <div class="container lost__inner">
-      <p class="eyebrow eyebrow--on-ink" data-hero-item>Error 404</p>
-      <h1 class="lost__title" data-hero-title>Page Not Found</h1>
-      <p class="page-head__sub" data-hero-item>That page has moved or never existed. Here is the way back.</p>
-      <div class="btn-row" data-hero-item>
-        <a class="btn btn--accent btn--lg" href="/">Go to homepage <span class="btn__icon"><Icon name="arrow" size={16} /></span></a>
-        <a class="btn btn--ghost-light btn--lg" href="/book-now">Book a cleaning</a>
-      </div>
+  <PageHead title="Page Not Found" subtitle="That page has moved or never existed." photo="scene-light" />
+  <section class="section section--tight">
+    <div class="container btn-row btn-row--center">
+      <a class="btn btn--lg" href="/">Go to Homepage</a>
+      <a class="btn btn--outline btn--lg" href="/book-now">Book a Cleaning</a>
     </div>
   </section>
-
-  <ServicesGrid />
 </Layout>

@@ -1,7 +1,7 @@
 /**
  * Photography, imported so Astro can resize and re-encode it (AVIF/WebP) at build.
  *
- * All images are placeholders from Pexels (https://www.pexels.com/license/ — free for
+ * All images are placeholders from Pexels (https://www.pexels.com/license/, free for
  * commercial use, no attribution required). The Pexels ID is noted beside each so
  * the source can be traced. Replace with the client's own photos when available:
  * drop the file into src/assets/photos/ with the same name and rebuild.

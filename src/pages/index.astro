@@ -2,30 +2,18 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import TrustBadges from '../components/TrustBadges.astro';
-import Statement from '../components/Statement.astro';
-import Marquee from '../components/Marquee.astro';
-import ServicesRail from '../components/ServicesRail.astro';
-import Process from '../components/Process.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
-import Testimonials from '../components/Testimonials.astro';
-import ServiceArea from '../components/ServiceArea.astro';
-import BookingSection from '../components/BookingSection.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { business, hero } from '../data/site.js';
 
-const description = `${hero.subheadline} ${business.name} serves ${business.city}, ${business.state} and surrounding areas — residential, office and commercial cleaning.`;
+const description = `${hero.subheadline} Residential, office and commercial cleaning in ${business.city}, ${business.state} and nearby areas.`;
 ---
 
-<Layout title={`${business.name} — ${business.tagline}`} description={description} bare intro>
+<Layout title={`${business.name} | ${business.tagline}`} description={description} bare>
   <Hero />
   <TrustBadges />
-  <Statement />
-  <Marquee />
-  <ServicesRail />
-  <Process />
+  <ServicesGrid />
   <WhyChooseUs />
-  <Testimonials />
-  <ServiceArea />
-  <BookingSection context="home" />
   <CtaBand />
 </Layout>

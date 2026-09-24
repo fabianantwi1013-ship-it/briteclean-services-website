@@ -1,12 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
-import Icon from '../components/Icon.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { faqs, business, phoneDigits, whatsappUrl } from '../data/site.js';
+import { faqs, business, phoneDigits } from '../data/site.js';
 
-// FAQPage structured data — this is the markup that can earn an expanded result in
-// Google, and it costs nothing since the questions are right here.
+// FAQPage structured data, eligible for expanded results in Google.
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -19,50 +16,27 @@ const faqSchema = {
 ---
 
 <Layout
-  title="Frequently Asked Questions"
-  description="Answers about booking, payment, access, supplies, staff vetting and our satisfaction guarantee."
+  title="FAQ"
+  description="Answers about booking, payment, access, supplies and our satisfaction guarantee."
 >
-  <PageHead title="FAQ" eyebrow="Good to know" subtitle="The questions we get asked most." photo="scene-kitchen" compact />
+  <PageHead title="FAQ" subtitle="Quick answers to common questions." photo="scene-kitchen" />
 
   <section class="section">
-    <div class="container faq-layout">
-      <aside class="faq-aside">
-        <div class="faq-aside__sticky">
-          <p class="eyebrow">{faqs.length} answers</p>
-          <h2 data-split>Everything you need to know <em>before we arrive</em></h2>
-          <div class="faq-card on-ink grain">
-            <p class="faq-card__title">Still have a question?</p>
-            <p class="faq-card__text">Call or message us — a real person answers.</p>
-            <a class="faq-card__phone" href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
-            <div class="btn-row">
-              <a class="btn btn--mint btn--sm" href={whatsappUrl()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp" size={16} /> WhatsApp</a>
-              <a class="btn btn--ghost-light btn--sm" href="/contact">Ask us something else</a>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <div class="faq" data-faq>
-        {faqs.map((faq, i) => (
-          <details class="faq__item" open={i === 0} data-reveal>
-            <summary>
-              <span class="index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-              <span class="faq__q">{faq.q}</span>
-              <span class="faq__toggle" aria-hidden="true"><Icon name="plus" size={18} /></span>
-            </summary>
-            <div class="faq__body"><p>{faq.a}</p></div>
+    <div class="container container--narrow">
+      <div class="faq">
+        {faqs.map((faq) => (
+          <details class="faq__item">
+            <summary>{faq.q}</summary>
+            <p>{faq.a}</p>
           </details>
         ))}
-
-        <div class="btn-row faq__actions">
-          <a class="btn btn--ink btn--lg" href="/book-now">Book a cleaning <span class="btn__icon"><Icon name="arrow" size={16} /></span></a>
-          <a class="link-line" href="/contact">Ask us something else</a>
-        </div>
       </div>
+      <p class="faq__more">
+        Still have a question? Call <a href={`tel:+${phoneDigits(business.phonePrimary)}`}>{business.phonePrimary}</a>
+        or <a href="/contact">send us a message</a>.
+      </p>
     </div>
   </section>
-
-  <CtaBand photo="scene-living" />
 
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 </Layout>

@@ -1,20 +1,15 @@
 /*
- * Briteclean Services — design system entry point.
+ * Briteclean Services: styles.
  *
- * tokens    colour, type, spacing, easing
- * base      reset, typography, layout primitives, buttons, page transitions
- * chrome    header, menu, footer, WhatsApp button, cursor, intro
- * sections  every page section
- * form      booking & contact forms (class names are a contract with the JS)
- * motion    pre-animation states, gated on the `motion` class
+ * tokens   colour, type, spacing
+ * base     reset, typography, buttons, reveal
+ * layout   header, menu, footer and every page section
+ * form     booking and contact forms (class names are a contract with the JS)
  *
- * Fonts (Instrument Serif, Manrope) are self-hosted through the Astro Fonts API —
- * see astro.config.mjs.
+ * The one typeface, Montserrat, is self-hosted through the Astro Fonts API; see
+ * astro.config.mjs.
  */
-
 @import './tokens.css';
 @import './base.css';
-@import './chrome.css';
-@import './sections.css';
+@import './layout.css';
 @import './form.css';
-@import './motion.css';

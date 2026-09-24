@@ -1,18 +1,12 @@
 ---
 import Icon from './Icon.astro';
-import { trustBadges, business } from '../data/site.js';
+import { trustBadges } from '../data/site.js';
 ---
 
 <section class="trust" aria-label="Our commitments">
-  <div class="container trust__inner">
-    <p class="trust__lead index">{business.name}</p>
-    <ul class="trust__list">
-      {trustBadges.map((badge) => (
-        <li class="trust__item" data-reveal>
-          <span class="trust__icon" aria-hidden="true"><Icon name={badge.icon} size={16} /></span>
-          <span>{badge.title}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
+  <ul class="container trust__list">
+    {trustBadges.map((badge) => (
+      <li><span class="trust__icon" aria-hidden="true"><Icon name={badge.icon} size={16} /></span>{badge.title}</li>
+    ))}
+  </ul>
 </section>

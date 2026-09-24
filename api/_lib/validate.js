@@ -2,7 +2,7 @@
  * Server-side validation for booking submissions.
  *
  * Direct port of the rules the WordPress plugin enforced. Runs on every request
- * regardless of what the browser did — the client-side checks exist only for faster
+ * regardless of what the browser did. The client-side checks exist only for faster
  * feedback and are treated as a convenience, never a guarantee.
  */
 
@@ -24,9 +24,9 @@ export const SERVICE_LABELS = {
 
 const PROPERTY_TYPES = { residential: 'Residential', office: 'Office', commercial: 'Commercial' };
 const TIME_PREFERENCES = {
-  morning: 'Morning (8am – 12pm)',
-  afternoon: 'Afternoon (12pm – 4pm)',
-  evening: 'Evening (4pm – 8pm)',
+  morning: 'Morning (8am to 12pm)',
+  afternoon: 'Afternoon (12pm to 4pm)',
+  evening: 'Evening (4pm to 8pm)',
 };
 const CONTACT_METHODS = { phone: 'Phone call', whatsapp: 'WhatsApp', email: 'Email' };
 
@@ -55,7 +55,7 @@ const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) && v.length <= 19
 const isValidDate = (v) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
   const d = new Date(v + 'T00:00:00Z');
-  // Date is lenient — "2026-13-45" rolls over. Comparing the round-trip rejects those.
+  // Date is lenient: "2026-13-45" rolls over. Comparing the round-trip rejects those.
   return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
 };
 
@@ -188,14 +188,14 @@ export function describeBooking(clean) {
 
 /**
  * Spam heuristics. Two layers ship enabled, both invisible to real visitors:
- *   1. Honeypot — a hidden field only an automated filler would populate.
- *   2. Time trap — submissions arriving impossibly fast, or from a form older than
+ *   1. Honeypot: a hidden field only an automated filler would populate.
+ *   2. Time trap: submissions arriving impossibly fast, or from a form older than
  *      two hours, are rejected.
  *
  * ---------------------------------------------------------------------------
  * ADDING A CAPTCHA (third layer)
  * ---------------------------------------------------------------------------
- * If these stop holding, add Cloudflare Turnstile — no visible challenge, no Google
+ * If these stop holding, add Cloudflare Turnstile: no visible challenge, no Google
  * cookie, and none of the accessibility problems image challenges cause:
  *   1. Render the widget in BookingForm.astro above `.bc-form__nav`.
  *   2. Verify the token here, before returning false:
@@ -207,7 +207,7 @@ export function describeBooking(clean) {
  *        if (!(await r.json()).success) return true;
  *   3. Store the secret as a Vercel environment variable, never in this file.
  *
- * Note there is deliberately no rate limiting here — serverless functions share no
+ * Note there is deliberately no rate limiting here: serverless functions share no
  * memory, so it would need Vercel KV or similar. Add it there if abuse appears.
  */
 export function looksLikeSpam(raw) {

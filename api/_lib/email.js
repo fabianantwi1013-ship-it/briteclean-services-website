@@ -1,7 +1,7 @@
 /**
  * Email delivery via Resend.
  *
- * Plain fetch rather than the SDK — one less dependency, and the API is two fields.
+ * Plain fetch rather than the SDK: one less dependency, and the API is two fields.
  *
  * Required environment variables (set in Vercel → Settings → Environment Variables):
  *   RESEND_API_KEY   Your Resend API key.
@@ -28,7 +28,7 @@ const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 /**
- * Table-based HTML shell — still what Outlook reliably renders.
+ * Table-based HTML shell, still what Outlook reliably renders.
  */
 export function wrap(heading, businessName, inner, footerLines = []) {
   return `<!doctype html>

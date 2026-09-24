@@ -2,7 +2,7 @@
  * Booking request handler.
  *
  * Validates the submission, then emails the business and confirms to the customer.
- * Nothing is stored — by design. That means a delivery failure is a lost booking,
+ * Nothing is stored, by design. That means a delivery failure is a lost booking,
  * which is why the owner notification is treated as the one that must succeed: if it
  * fails, the visitor is told to call instead rather than being shown a false success.
  */
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
   }
 
   if (!isConfigured()) {
-    console.error('[booking] Email is not configured — RESEND_API_KEY, MAIL_FROM or MAIL_TO missing.');
+    console.error('[booking] Email is not configured: RESEND_API_KEY, MAIL_FROM or MAIL_TO missing.');
     return res.status(500).json({
       ok: false,
       message: `We could not send your request. Please call us on ${BUSINESS.phone} and we will take the booking over the phone.`,
@@ -69,7 +69,7 @@ ${detailsTable(rows)}
 
   const ownerResult = await send({
     to,
-    subject: `New booking request — ${clean.fullName} (${prettyDate})`,
+    subject: `New booking request: ${clean.fullName} (${prettyDate})`,
     html: ownerHtml,
     replyTo: clean.email,
   });
@@ -79,7 +79,7 @@ ${detailsTable(rows)}
     console.error('[booking] Owner notification failed:', ownerResult.error, JSON.stringify(clean));
     return res.status(502).json({
       ok: false,
-      message: `We could not send your request just now. Please call us on ${BUSINESS.phone} — we do not want to lose your booking.`,
+      message: `We could not send your request just now. Please call us on ${BUSINESS.phone} so we do not lose your booking.`,
     });
   }
 
@@ -89,8 +89,8 @@ ${detailsTable(rows)}
     'Your Booking Request',
     BUSINESS.name,
     `<p style="margin:0 0 16px;font-size:16px;">Hi ${escapeHtml(firstName)},</p>
-<p style="margin:0 0 16px;font-size:15px;">Thank you — we have received your booking request. A member of our team will be in touch shortly to confirm the details and agree a time.</p>
-<p style="margin:0 0 24px;font-size:15px;"><strong>Nothing has been charged.</strong> This is a request, not a confirmed appointment — we always speak to you before anything is scheduled.</p>
+<p style="margin:0 0 16px;font-size:15px;">Thank you. We have received your booking request and will be in touch shortly to confirm the details and agree a time.</p>
+<p style="margin:0 0 24px;font-size:15px;"><strong>Nothing has been charged.</strong> This is a request, not a confirmed appointment. We always speak to you before anything is scheduled.</p>
 <p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;">What you asked for</p>
 ${detailsTable(rows)}
 <p style="margin:26px 0 0;font-size:15px;">Spotted something wrong, or need it sooner? Reply to this email or call us on ${escapeHtml(BUSINESS.phone)}.</p>`,
@@ -99,7 +99,7 @@ ${detailsTable(rows)}
 
   const customerResult = await send({
     to: [clean.email],
-    subject: `We have received your booking request — ${BUSINESS.name}`,
+    subject: `We have received your booking request | ${BUSINESS.name}`,
     html: customerHtml,
     replyTo: config().to[0],
   });

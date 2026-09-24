@@ -9,26 +9,17 @@ interface Props {
 const { photo = 'scene-kitchen' } = Astro.props;
 ---
 
-<section class="cta-band on-ink grain">
-  <div class="cta-band__media">
-    <div class="parallax" data-parallax="16">
-      <Img photo={photo} sizes="100vw" widths={[960, 1440, 1920, 2400]} alt="" />
-    </div>
+<section class="cta">
+  <div class="cta__media" aria-hidden="true">
+    <Img photo={photo} alt="" sizes="100vw" widths={[640, 1280, 1920]} />
   </div>
-  <div class="cta-band__scrim" aria-hidden="true"></div>
-
-  <div class="container cta-band__inner">
-    <p class="eyebrow eyebrow--on-ink">{business.taglineSecondary}</p>
-    <h2 class="cta-band__title" data-split>Ready for a Sparkling <em>Clean Space?</em></h2>
-    <p class="cta-band__text">Tell us what you need and when you need it. We will confirm your booking personally — usually the same day.</p>
+  <div class="container cta__inner" data-reveal>
+    <h2>Ready for a Sparkling Clean Space?</h2>
+    <p>{business.taglineSecondary}.</p>
     <div class="btn-row">
-      <a class="btn btn--accent btn--lg" href="/book-now" data-magnetic>
-        {hero.ctaPrimary}
-        <span class="btn__icon"><Icon name="arrow" size={16} /></span>
-      </a>
-      <a class="btn btn--ghost-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
-        <Icon name="phone" size={18} />
-        {business.phonePrimary}
+      <a class="btn btn--accent btn--lg" href="/book-now">{hero.ctaPrimary}</a>
+      <a class="btn btn--outline-light btn--lg" href={`tel:+${phoneDigits(business.phonePrimary)}`}>
+        <Icon name="phone" size={18} /> {business.phonePrimary}
       </a>
     </div>
   </div>

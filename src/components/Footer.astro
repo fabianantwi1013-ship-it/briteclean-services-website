@@ -1,99 +1,59 @@
 ---
-import Icon from './Icon.astro';
-import { business, phoneDigits, whatsappUrl, hero, trustBadges } from '../data/site.js';
+import { business, phoneDigits, hero } from '../data/site.js';
 
-const socialLabels = { facebook: 'Facebook', instagram: 'Instagram', google: 'Google Business Profile', yelp: 'Yelp' };
+const socialLabels = { facebook: 'Facebook', instagram: 'Instagram', google: 'Google', yelp: 'Yelp' };
 const socials = Object.entries(business.social).filter(([, url]) => url);
 const year = new Date().getFullYear();
 const tel = (p) => `tel:+${phoneDigits(p)}`;
 ---
 
-<footer class="site-footer on-ink grain">
-  <div class="container">
-    <ul class="footer__trust" aria-label="Our commitments">
-      {trustBadges.map((badge) => (
-        <li>
-          <span class="footer__trust-icon" aria-hidden="true"><Icon name={badge.icon} size={16} /></span>
-          {badge.title}
-        </li>
-      ))}
-    </ul>
-
-    <div class="footer__lead">
-      <p class="footer__statement" data-split>
-        {business.taglineSecondary.split(', ')[0]},<br /><em>{business.taglineSecondary.split(', ')[1]}</em>
-      </p>
-      <div class="footer__lead-actions">
-        <a class="btn btn--accent btn--lg" href="/book-now" data-magnetic>
-          {hero.ctaPrimary}
-          <span class="btn__icon"><Icon name="arrow" size={16} /></span>
-        </a>
-        <a class="link-line" href={whatsappUrl()} target="_blank" rel="noopener noreferrer">
-          <Icon name="whatsapp" size={18} /> Message us on WhatsApp
-        </a>
-      </div>
-    </div>
-
-    <div class="footer__grid">
-      <div class="footer__brand">
-        <img src="/img/brand/logo-white.png" alt={business.name} width="477" height="134" loading="lazy" />
-        <p>{hero.subheadline}</p>
-        {socials.length > 0 && (
-          <div class="footer__social">
-            {socials.map(([network, url]) => (
-              <a href={url} target="_blank" rel="noopener noreferrer">{socialLabels[network]}</a>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div>
-        <h2 class="footer__heading">Get in touch</h2>
-        <ul class="footer__list">
-          <li><a href={tel(business.phonePrimary)}>{business.phonePrimary}</a></li>
-          <li><a href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a></li>
-          <li><a href={`mailto:${business.email}`}>{business.email}</a></li>
-          <li>
-            <address>
-              {business.street}<br />
-              {business.city}, {business.state} {business.postal}
-            </address>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h2 class="footer__heading">Explore</h2>
-        <ul class="footer__list">
-          <li><a href="/services">Services</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="/contact">Contact</a></li>
-          <li><a href="/book-now">Book Now</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h2 class="footer__heading">Opening hours</h2>
-        <dl class="footer__hours">
-          {business.hours.map((h) => (
-            <div>
-              <dt>{h.days}</dt>
-              <dd>{h.time}</dd>
-            </div>
+<footer class="site-footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <img src="/img/brand/logo-white.png" alt={business.name} width="477" height="134" loading="lazy" />
+      <p>{hero.subheadline}</p>
+      {socials.length > 0 && (
+        <p class="footer__social">
+          {socials.map(([network, url]) => (
+            <a href={url} target="_blank" rel="noopener noreferrer">{socialLabels[network]}</a>
           ))}
-        </dl>
-      </div>
+        </p>
+      )}
     </div>
 
-    <p class="footer__mega" aria-hidden="true" data-footer-mega>Briteclean</p>
-
-    <div class="footer__bottom">
-      <p>© {year} {business.name}. All rights reserved.</p>
-      <p>{business.tagline}</p>
-      <a class="footer__top" href="#main" data-to-top>
-        Back to top <Icon name="arrowUp" size={16} />
-      </a>
+    <div>
+      <h2 class="footer__heading">Contact</h2>
+      <ul class="footer__list">
+        <li><a href={tel(business.phonePrimary)}>{business.phonePrimary}</a></li>
+        <li><a href={tel(business.phoneSecondary)}>{business.phoneSecondary}</a></li>
+        <li><a href={`mailto:${business.email}`}>{business.email}</a></li>
+        <li><address>{business.street}<br />{business.city}, {business.state} {business.postal}</address></li>
+      </ul>
     </div>
+
+    <div>
+      <h2 class="footer__heading">Company</h2>
+      <ul class="footer__list">
+        <li><a href="/services">Services</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/book-now">Book Now</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="footer__heading">Hours</h2>
+      <dl class="footer__hours">
+        {business.hours.map((h) => (
+          <div><dt>{h.days}</dt><dd>{h.time}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© {year} {business.name}</p>
+    <p>{business.tagline}</p>
   </div>
 </footer>

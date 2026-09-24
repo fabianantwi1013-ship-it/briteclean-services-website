@@ -1,12 +1,8 @@
 ---
 import Icon from './Icon.astro';
 import { whatsappUrl } from '../data/site.js';
-
-const label = 'Book via WhatsApp';
 ---
 
-<a class="whatsapp-float" href={whatsappUrl()} target="_blank" rel="noopener noreferrer" data-wa-float>
-  <span class="whatsapp-float__icon"><Icon name="whatsapp" size={24} /></span>
-  <span class="whatsapp-float__label">{label}</span>
-  <span class="sr-only">(opens WhatsApp in a new tab)</span>
+<a class="whatsapp-float" href={whatsappUrl()} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp (opens in a new tab)" data-wa-float>
+  <Icon name="whatsapp" size={26} />
 </a>
